@@ -6,14 +6,14 @@ var jwt = require('jsonwebtoken');
 var SECRET = "sampleapplication";
 var excludePath = ['/users/authenticate'];
 
-router.use(function(req, res, next) {
+router.use(function (req, res, next) {
     console.log("middle ware");
     if (excludePath.indexOf(req.originalUrl) != -1) {
         next();
     } else {
         var token = req.body.token || req.body.query || req.headers['x-access-token'];
         if (token) {
-            jwt.verify(token, SECRET, function(err, decoded) {
+            jwt.verify(token, SECRET, function (err, decoded) {
                 if (err) {
                     res.json({ success: false, message: "Invalid token" });
                 } else {
@@ -26,7 +26,7 @@ router.use(function(req, res, next) {
         }
     }
 });
-router.get('/userList', function(req, res, next) {
+router.get('/userList', function (req, res, next) {
     // forming query criteria
     if (req.decoded && req.decoded.role === "super") {
         var filter = {};
@@ -43,7 +43,7 @@ router.get('/userList', function(req, res, next) {
 
         User.find(
             criteria, "username emailid employeenumber designation level woffice role", filter,
-            function(err, users) {
+            function (err, users) {
                 if (err) {
                     return res.json({
                         success: false,
@@ -61,9 +61,33 @@ router.get('/userList', function(req, res, next) {
     }
 
 });
-router.get("/individual/:userid", function(req, res) {
+router.get("/search/:searchKey", function (req, res) {
+    try {
+        if (req.decoded && req.decoded.role == "super" && req.params.searchKey != "undefined") {
+            let greaterThan = Number(req.params.searchKey) - 1;
+            let query = { employeenumber: { $lt: 10000, $gt: greaterThan } };
+            User.find(query, "username employeenumber", function (err, users) {
+                if (err) {
+                    return res.json({
+                        users: []
+                    });
+                } else {
+                    res.json({
+                        users: users
+                    });
+                }
+            });
+        }
+    }
+    catch (e) {
+        return res.json({
+            users: []
+        });
+    }
+});
+router.get("/individual/:userid", function (req, res) {
     if (req.decoded && req.decoded.role == "super" && req.params.userid != "undefined") {
-        User.findById(req.params.userid, function(err, user) {
+        User.findById(req.params.userid, function (err, user) {
             if (err) {
                 return res.json({
                     success: false,
@@ -81,7 +105,7 @@ router.get("/individual/:userid", function(req, res) {
         return res.redirect('/');
     }
 });
-router.put('/updateUser/:userId', function(req, res) {
+router.put('/updateUser/:userId', function (req, res) {
     if (req.decoded && req.decoded.role === "super") {
 
         var update = req.body.user;
@@ -92,7 +116,7 @@ router.put('/updateUser/:userId', function(req, res) {
             level: update.level,
             woffice: update.woffice,
             phone: update.phone
-        }, function(err, user) {
+        }, function (err, user) {
             if (err) {
                 return res.json({
                     success: false,
@@ -110,10 +134,10 @@ router.put('/updateUser/:userId', function(req, res) {
     }
 });
 
-router.post('/changePassword/:userId', function(req, res) {
+router.post('/changePassword/:userId', function (req, res) {
     console.log("dasd" + req.params.userId)
     if (req.decoded && req.decoded.employeenumber == req.params.userId) {
-        User.findOne({ employeenumber: req.params.userId }, function(err, user) {
+        User.findOne({ employeenumber: req.params.userId }, function (err, user) {
             console.log(user)
             if (err) {
                 return res.json({
@@ -123,7 +147,7 @@ router.post('/changePassword/:userId', function(req, res) {
             } else if (req.body && user && user.comparePassword(req.body.oldP || "") &&
                 req.body.newP == req.body.confirmP) {
                 user.password = req.body.newP;
-                user.save(function(err) {
+                user.save(function (err) {
                     if (err) {
                         return res.json({
                             success: false,
@@ -151,11 +175,11 @@ router.post('/changePassword/:userId', function(req, res) {
     }
 });
 
-router.post('/authenticate', function(req, res) {
+router.post('/authenticate', function (req, res) {
     console.log(req.body.employeenumber);
     User.findOne({
         employeenumber: req.body.employeenumber
-    }, 'username emailid password employeenumber role', function(err, user) {
+    }, 'username emailid password employeenumber role', function (err, user) {
         if (err) {
             return res.json({ success: false, message: err });
         } else {
@@ -183,7 +207,7 @@ router.post('/authenticate', function(req, res) {
     });
 });
 
-router.post('/createUser', function(req, res) {
+router.post('/createUser', function (req, res) {
     if (req.decoded && req.decoded.role === "super") {
         var username = req.body.username,
             password = req.body.password,
@@ -208,7 +232,7 @@ router.post('/createUser', function(req, res) {
         newUser.level = level;
         newUser.woffice = woffice;
         newUser.role = "single";
-        newUser.save(function(err) {
+        newUser.save(function (err) {
             if (err) {
                 console.log(err);
                 return res.json({
@@ -233,7 +257,7 @@ router.post('/createUser', function(req, res) {
 
 
 //give the user profile
-router.post('/me', function(req, res) {
+router.post('/me', function (req, res) {
     console.log(req.decoded);
     res.send({
         success: true,
@@ -242,11 +266,11 @@ router.post('/me', function(req, res) {
 });
 
 
-router.delete("/deleteUser/:id", function(req, res) {
+router.delete("/deleteUser/:id", function (req, res) {
     if (req.decoded && req.decoded.role === "super") {
         var id = req.params.id;
         if (id != undefined) {
-            User.findByIdAndRemove(id, function(err) {
+            User.findByIdAndRemove(id, function (err) {
                 if (!err) {
                     return res.json({
                         success: true,

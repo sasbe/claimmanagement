@@ -268,3 +268,18 @@ table tr:nth-child(even) {
         bottom: 0;
     }
 }
+
+.autocomplete-custom li {
+    border-bottom: 1px solid #ccc;
+    height: auto;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    white-space: normal;
+  }
+  .autocomplete-custom li:last-child {
+    border-bottom-width: 0;
+  }
+  .autocomplete-custom .item-metadata {
+    display: block;
+    line-height: 2;
+  }
