@@ -15,3 +15,5 @@
 *.PDF	 diff=astextplain
 *.rtf	 diff=astextplain
 *.RTF	 diff=astextplain
+D:/mywork/claimmanagement/node_modules/
+D:/mywork/claimmanagement/login-api/node_modules/
