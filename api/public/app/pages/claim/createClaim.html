@@ -1,0 +1,66 @@
+<div class="container" ng-hide="main.appLoading">
+    <div class="page-header">
+        <h2>Create claim</h2>
+    </div>
+    <form name="addClaimForm" ng-hide="createClaim.appLoading" ng-submit="createClaim.addClaim()" novalidate>
+        <div class="row">
+            <div class="form-group col-md-6">
+                <label for="employeeno">Employee Number:</label>
+                <input type="text" class="form-control" name="employeeno" number placeholder="Enter employee number" ng-model="createClaim.claimData.employeeno" required>
+                <div class="error" ng-show="addClaimForm.employeeno.$dirty && addClaimForm.employeeno.$invalid">
+                    <span ng-show="addClaimForm.employeeno.$error.required">Value is required.</span>
+                    <span ng-show="!addClaimForm.employeeno.$error.required && addClaimForm.employeeno.$error.number">Enter a valid number.</span>
+                </div>
+
+            </div>
+            <div class="form-group col-md-6">
+                <label for="contactnum">Contact number</label>
+                <input type="text" class="form-control" name="contactnum" placeholder="contact number" ng-model="createClaim.claimData.contactnum" number required>
+                <div class="error" ng-show="addClaimForm.contactnum.$dirty && addClaimForm.contactnum.$invalid">
+                    <span ng-show="addClaimForm.contactnum.$error.required">Value is required.</span>
+                    <span ng-show="addClaimForm.contactnum.$error.number">Phone number is invalid.</span>
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="form-group col-md-6">
+                <label for="claimdate">Claim Date:</label>
+                <nepalidatepicker ng-model="createClaim.claimData.claimdate" required></nepalidatepicker>
+                <div class="error" ng-show="addClaimForm.claimdate.$dirty && addClaimForm.claimdate.$invalid">
+                    <span ng-show="addClaimForm.emailid.$error.required">Value is required.</span>
+                </div>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="claimoffice">Claim Office:</label>
+                <input type="text" class="form-control" name="claimoffice" placeholder="office name" ng-model="createClaim.claimData.claimoffice" required>
+                <div class="error" ng-show="addClaimForm.claimoffice.$dirty && addClaimForm.claimoffice.$invalid">
+                    <span ng-show="addClaimForm.claimoffice.$error.required">Value is required.</span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-6">
+                <label for="claimname">Claim Name:</label>
+                <input type="text" class="form-control" name="claimname" placeholder="claim name" ng-model="createClaim.claimData.claimname" required>
+                <div class="error" ng-show="addClaimForm.claimname.$dirty && addClaimForm.claimname.$invalid">
+                    <span ng-show="addClaimForm.claimname.$error.required">Value is required.</span>
+                </div>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="claimamount">Claim Amount(NRS)</label>
+                <nepalimoney ng-model="createClaim.claimData.claimamount" required></nepalimoney>
+                <div class="error" ng-show="addClaimForm.claimamount.$dirty && addClaimForm.claimamount.$invalid">
+                    <span ng-show="addClaimForm.claimamount.$error.required">Value is required.</span>
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary" ng-disabled=" addClaimForm.contactnum.$invalid ||
+  addClaimForm.claimdate.$invalid|| addClaimForm.claimname.$invalid || 
+   addClaimForm.claimoffice.$invalid ||  addClaimForm.claimno.$invalid || 
+   addClaimForm.claimamount.$invalid || addClaimForm.employeeno.$invalid || addClaimForm.employeenumber.$error.number||
+   addClaimForm.claimamount.$error.money || addClaimForm.emailid.$error.date">Add Claim</button>
+
+    </form>
+</div>

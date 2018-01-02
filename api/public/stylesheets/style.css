@@ -1,0 +1,270 @@
+/* messages animation */
+
+@font-face {
+    font-family: "San Francisco";
+    font-weight: 400;
+    src: url("/fonts/sanfranciscodisplay-regular-webfont.woff");
+}
+
+html {
+    background: linear-gradient(to bottom right, #e6eded 40%, #31667a 75%);
+    height: 100%;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "San Francisco";
+    font-size: 20px;
+    background: transparent;
+}
+
+.container {
+    margin-top: 10px;
+}
+
+.show-hide-message.ng-hide-remove {
+    animation: zoomIn 0.3s both ease;
+}
+
+.form-control[disabled],
+.form-control[readonly],
+fieldset[disabled] .form-control,
+.datepicker[disabled="disabled"] input {
+    border: none;
+    box-shadow: none;
+    background: transparent;
+    cursor: pointer;
+    padding-left: 0;
+}
+
+.navbar {
+    /* border-bottom: 4px solid cadetblue; */
+    background: #FFF;
+    border-radius: 0;
+    margin-bottom: 0;
+}
+
+.errorwindow {
+    position: fixed;
+    top: 0;
+    width: 50%;
+    left: 25%;
+    box-shadow: 5px 5px 50px #bce;
+}
+
+.errorwindow .header {
+    background-color: white;
+    height: 30px;
+    font-size: 25px;
+}
+
+.errorwindow .header>div {
+    display: flex;
+    display: -webkit-flex;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.errorwindow .header .fa.fa-exclamation-circle {
+    color: red;
+    padding-top: 2px;
+}
+
+.errorwindow .header .fa.fa-check-circle {
+    color: green;
+    padding-top: 2px;
+}
+
+.errorwindow .alert {
+    margin-bottom: 0;
+    border-radius: none;
+}
+
+.apploading {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+}
+
+.apploading .backdrop {
+    width: 100%;
+    height: 100%;
+    background-color: #ececec;
+    opacity: 0.75;
+}
+
+.apploading .spinner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+}
+
+table,
+th,
+td {
+    border: 1px solid grey;
+    border-collapse: collapse;
+    padding: 5px;
+}
+
+table tr:nth-child(odd) {
+    background-color: #f1f1f1;
+}
+
+table tr:nth-child(even) {
+    background-color: #ffffff;
+}
+
+.sortorder:after {
+    content: '\25b2';
+}
+
+.sortorder.reverse:after {
+    content: '\25bc';
+}
+
+.panel-info>.panel-heading {
+    border: none;
+    background: aliceblue;
+    margin-bottom: 24px;
+}
+
+.panel-info {
+    border: none;
+    border-radius: 0;
+}
+
+.panel-content table thead tr {
+    color: #31708f;
+    background: none;
+}
+
+.error {
+    font-size: 16px;
+    color: red;
+}
+
+.required:after {
+    content: '*';
+    color: red;
+}
+
+.datepicker {
+    position: relative;
+    padding: 0;
+}
+
+.datepicker .ndp-click-trigger {
+    position: absolute;
+    right: 0;
+    top: 0;
+    padding: 6px 12px;
+}
+
+.datepicker[disabled="disabled"] .ndp-click-trigger {
+    display: none;
+}
+
+.filter {
+    border-bottom: 2px solid #ececec;
+    margin: 0;
+}
+
+.filter .pagination {
+    margin: 0;
+}
+
+#filterContainer {
+    position: absolute;
+    background: linear-gradient(to bottom right, #e6eded 40%, #31667a 75%);
+}
+
+.navbar .navbar-toggle .icon-bar {
+    background: #31667a;
+}
+
+.card {
+    height: calc(50vh - 70px);
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.card h3 {
+    margin: 0;
+}
+
+.card .card-header,
+.card .card-content,
+.card .card-footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: inherit;
+}
+
+.card .card-header {
+    background: #FFF;
+    height: calc(10vh - 18px);
+    border-bottom: 1px solid rgba(128, 136, 180, 0.62);
+    background: rgba(95, 158, 160, 0.46)
+}
+
+.card .card-content {
+    background: #FFF;
+    height: calc(30vh - 18px);
+    border-bottom: 1px solid rgba(128, 136, 180, 0.62);
+}
+
+.card .card-footer {
+    background: #FFF;
+    height: calc(10vh - 18px);
+    background: #fff;
+}
+
+.form-horizontal .control-label {
+    text-align: left;
+}
+
+@media all and (max-width: 768px) {
+    html {
+        background: #fff;
+    }
+    table td:before {
+        content: attr(data-label);
+        float: left;
+        text-transform: uppercase;
+    }
+    table {
+        border: 0;
+    }
+    table thead {
+        display: none;
+    }
+    .table>tbody>tr {
+        margin-bottom: 10px;
+        display: block;
+        /* border-bottom: 2px solid #ddd; */
+    }
+    .table>tbody>tr>td {
+        display: block;
+        text-align: right;
+        font-size: 13px;
+        border: none;
+        min-height: 30px;
+    }
+    .filter>div:nth-child(1) {
+        width: 100%;
+        position: absolute;
+        margin-right: auto;
+        margin-left: auto;
+        background: #dea;
+        z-index: 100;
+        text-align: center;
+    }
+    #filterContainer {
+        width: calc(100% - 30px);
+        top: 52px;
+        bottom: 0;
+    }
+}

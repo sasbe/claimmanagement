@@ -1,0 +1,24 @@
+<div class="page-header">
+    <h2>Login</h2>
+</div>
+<form name="loginForm" ng-hide="main.appLoading" ng-submit="main.doLogin()" novalidate>
+    <div class="form-group">
+        <span class="required"></span>
+        <label for="employeenumber">Employee Number:</label>
+        <input type="text" class="form-control" name="employeenumber" number autofocus placeholder="Enter user number" ng-model="main.loginData.employeenumber" required>
+        <div class="error" ng-show="loginForm.employeenumber.$dirty && loginForm.employeenumber.$invalid">
+            <span ng-show="loginForm.employeenumber.$error.number || loginForm.employeenumber.$error.required">Please enter a number.</span>
+        </div>
+    </div>
+    <div class="form-group">
+        <span class="required"></span>
+        <label for="password">Password:</label>
+        <input type="password" class="form-control" name="password" placeholder="Enter password" ng-model="main.loginData.password" required>
+        <span class="error" ng-show="loginForm.password.$dirty && loginForm.password.$invalid">
+        <span ng-show="loginForm.password.$error.required">Password is required.</span>
+        </span>
+    </div>
+
+    <button type="submit" class="btn btn-primary" ng-disabled="loginForm.employeenumber.$invalid ||  loginForm.password.$invalid || loginForm.employeenumber.$error.number">Login</button>
+
+</form>

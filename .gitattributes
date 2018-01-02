@@ -15,5 +15,7 @@
 *.PDF	 diff=astextplain
 *.rtf	 diff=astextplain
 *.RTF	 diff=astextplain
-/node_modules/
-/login-api/node_modules/
+/node_modules/*
+/api/node_modules/*
+/.vscode/*
+/api/.vscode/*

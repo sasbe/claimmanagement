@@ -1,0 +1,61 @@
+<div class="row">
+
+    <div class="card col-md-6" ng-show="main.isLoggedIn">
+        <div class="card-header text-center">
+            <h3>Claim List</h3>
+        </div>
+        <div class="card-content">
+            <div class="card-image">
+                <a href="/claimList"> <i class="fa fa-list fa-3x" aria-hidden="true"></i></a>
+            </div>
+
+        </div>
+        <div class="card-footer text-center">
+            <span>View the list of claims registered</span>
+        </div>
+    </div>
+
+    <div class="card col-md-6" ng-show="main.isLoggedIn">
+        <div class="card-header text-center ">
+            <h3>Add Claim</h3>
+        </div>
+        <div class="card-content ">
+            <div class="card-image ">
+                <a href="/createClaim"> <i class="fa fa-plus fa-3x " aria-hidden="true "></i></a>
+            </div>
+
+        </div>
+        <div class="card-footer text-center ">
+            <span>Add a claim to a user</span>
+        </div>
+    </div>
+
+    <div class="card col-md-6 " ng-show="main.isLoggedIn && main.isAdmin">
+        <div class="card-header text-center ">
+            <h3>Add User</h3>
+        </div>
+        <div class="card-content ">
+            <div class="card-image ">
+                <a href="/register"> <i class="fa fa-plus fa-3x " aria-hidden="true "></i></a>
+            </div>
+        </div>
+        <div class="card-footer text-center ">
+            <span>Add a user in application</span>
+        </div>
+    </div>
+
+    <div class="card col-md-6" ng-show="main.isLoggedIn && main.isAdmin">
+        <div class="card-header text-center ">
+            <h3>Users List</h3>
+        </div>
+        <div class="card-content ">
+            <div class="card-image ">
+                <a href="/userList"><i class="fa fa-list fa-3x " aria-hidden="true "></i></a>
+            </div>
+
+        </div>
+        <div class="card-footer text-center ">
+            <span> View the list of users available in application</span>
+        </div>
+    </div>
+</div>

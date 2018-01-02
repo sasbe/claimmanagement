@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+        <%= title %>
+    </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <base href="/">
+
+    <!-- CSS files-->
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="stylesheets/animate.css" />
+    <link rel="stylesheet" href="stylesheets/style.css" />
+    <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="css/nepali.datepicker.v2.2.min.css" />
+
+    <!-- js libraries-->
+    <script src="javascripts/jquery.js"></script>
+    <!-- <script src="javascripts/jquery.mobilejs.js"></script> -->
+    <script src="javascripts/bootstrap.js"></script>
+    <script src="javascripts/nepali.datepicker.v2.2.min.js"></script>
+    <script src="javascripts/accounting.min.js"></script>
+    <!--main angular -->
+
+    <script src="javascripts/angular.js"></script>
+    <script src="javascripts/angular-route.js"></script>
+    <script src="javascripts/angular-animate.js"></script>
+    <script src="javascripts/angular-resource.js"></script>
+
+    <!--angualr config and routes-->
+    <script src="app/app.js"></script>
+    <script src="app/route.js"></script>
+
+    <!-- angualr controller-->
+    <script src="app/controller/homeCtrl.js"></script>
+    <script src="app/controller/users/userCtrl.js"></script>
+    <script src="app/controller/users/listController.js"></script>
+    <script src="app/controller/mainCtrl.js"></script>
+    <script src="app/controller/claims/claimCtrl.js"></script>
+    <script src="app/controller/claims/listController.js"></script>
+    <script src="app/controller/claims/claimDetailsCtrl.js"></script>
+    <script src="app/controller/users/userDetailsCtrl.js"></script>
+    <!-- andular services-->
+    <script src="app/services/userServices.js"></script>
+    <script src="app/services/authServices.js"></script>
+    <script src="app/services/claimServices.js"></script>
+    <script src="app/services/commonServices.js"></script>
+
+    <!-- directives -->
+    <script src="app/directives/commonDirectives.js"></script>
+
+</head>
+
+<body ng-app="userApp" ng-controller="mainCtrl as main" ng-Cloak>
+    <nav class="navbar  fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbarsExampleDefault">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span> 
+                </button>
+                <a class="navbar-brand" href="#">Claim Management</a>
+            </div>
+
+            <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+                <ul class="navbar-nav nav">
+                    <li class="nav-item ">
+                        <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li ng-show="main.isLoggedIn && main.isAdmin"><a href="/register"><i class="fa fa-plus" aria-hidden="true"></i> Add User</a></li>
+                    <li ng-show="!main.isLoggedIn"><a href="/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                    <li ng-show="main.isLoggedIn"><a href="/createClaim"><span class="glyphicon glyphicon-log-in"></span> Add Claim</a></li>
+                    <li class="nav-item " ng-show="main.isLoggedIn" class="dropdown">
+                        <a class=" dropdown-toggle " data-toggle="dropdown"><span class="glyphicon glyphicon-user "></span>{{ main.userDetails.username }}
+                        <span class="caret "></span></a>
+                        <ul class="dropdown-menu ">
+                            <li><a href="/profile ">About me</a></li>
+                            <li><a href="#" ng-click="main.logOut() ">Logout</a></li>
+                            <li><a href="/changePassword">Change password</a></li>
+                        </ul>
+
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container ">
+        <!-- angular view-->
+        <ng-view></ng-view>
+    </div>
+    <div class="errorwindow ">
+        <div class=" show-hide-message " ng-show="main.successMessage ">
+            <div class="header ">
+                <div>
+                    <i class="fa fa-check-circle fa-lg " aria-hidden="true "></i>Success
+                </div>
+            </div>
+            <div class="alert alert-success col-md-12 ">{{main.successMessage}}</div>
+        </div>
+        <div class=" show-hide-message " ng-show="main.errorMessage ">
+            <div class="header ">
+                <div><i class="fa fa-exclamation-circle " aria-hidden="true "></i>Error
+                </div>
+            </div>
+            <div class="alert alert-danger col-md-12 ">{{main.errorMessage}}</div>
+        </div>
+    </div>
+    <div ng-show="main.appLoading " class="apploading ">
+        <div class="backdrop ">
+        </div>
+        <div class="spinner ">
+            <i class="fa fa-cog fa-spin fa-3x fa-fw "></i>
+            <span class="sr-only ">Loading...</span>
+        </div>
+    </div>
+    <script>
+        accounting.settings = {
+            currency: {
+                symbol: "₹", // default currency symbol is '$'
+                format: "%s%v", // controls output: %s = symbol, %v = value/number (can be object: see below)
+                decimal: ".", // decimal point separator
+                thousand: ",", // thousands separator
+                precision: 2 // decimal places
+            },
+            number: {
+                precision: 0, // default precision on numbers is 0
+                thousand: ",",
+                decimal: "."
+            }
+        }
+    </script>
+</body>
+
+</html>

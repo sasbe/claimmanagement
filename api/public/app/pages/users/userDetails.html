@@ -1,0 +1,71 @@
+<div class="container">
+    <div class="page-header">
+        <div class="row">
+            <h2 class="col-md-6" style="padding-left: 0;">User "{{ userDetails.userData.employeenumber }}"</h2>
+            <div class="col-md-6 text-right" style="margin-top:25px;">
+                <i class="fa fa-pencil-square-o" ng-hide=" userform.username.$invalid || userform.emailid.$invalid || userform.department.$invalid  || (userform.level.$invalid && userform.level.$dirty)|| ( userform.designation.$dirty && userform.designation.$invalid)"
+                    ng-class="{ 'fa-floppy-o':userDetails.editMode}" ng-click="userDetails.changeMode()" aria-hidden="true"></i>
+                <i class="fa fa-trash-o" aria-hidden="true" ng-show="!userDetails.editMode" ng-click="userDetails.deleteUser()"></i>
+                <i class="fa fa-times" aria-hidden="true" ng-show="userDetails.editMode" ng-click="userDetails.cancelEdit()"></i>
+            </div>
+        </div>
+    </div>
+
+    <form class=" form-horizontal " name="userform">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <span ng-class="{required: userDetails.editMode}"></span>
+                    <label for="username">User name:</label>
+                    <input type="text" class="form-control" ng-disabled="main.isAdmin && !userDetails.editMode " name="username" placeholder="Enter user name" ng-model="userDetails.userData.username" required>
+                    <div class="error" ng-show="userform.username.$dirty && userform.username.$invalid">
+                        <span ng-show="userform.username.$error.required">Username is required.</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <span ng-class="{required: userDetails.editMode}"></span>
+                    <label for="emailid">Email address:</label>
+                    <input type="email" class="form-control" ng-disabled="main.isAdmin && !userDetails.editMode " name="emailid" placeholder="Enter email" ng-model="userDetails.userData.emailid" required>
+                    <div class="error" ng-show="userform.emailid.$dirty && userform.emailid.$invalid">
+                        <span ng-show="userform.emailid.$error.required">Email is required.</span>
+                        <span ng-show="userform.emailid.$error.email">Invalid email address.</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Phone number</label>
+                    <input type="text" class="form-control" ng-disabled="main.isAdmin && !userDetails.editMode " name="phone" number placeholder="Enter phone number" ng-model="userDetails.userData.phone" required>
+                    <div class="error" ng-show="userform.phone.$dirty && userform.phone.$invalid">
+                        <span ng-show="userform.phone.$error.required">Phone is required.</span>
+                        <span ng-show="userform.phone.$error.email">Invalid phone number.</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <span ng-class="{required: userDetails.editMode}"></span>
+                    <label for="designation">Designation</label>
+                    <input type="text" class="form-control" ng-disabled="main.isAdmin && !userDetails.editMode " name="designation" placeholder="Enter the designation" ng-model="userDetails.userData.designation" required>
+                    <div class="error" ng-show="userform.designation.$dirty && userform.designation.$invalid">
+                        <span ng-show="userform.designation.$error.required">Designation is required.</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <span ng-class="{required: userDetails.editMode}"></span>
+                    <label>Level</label>
+                    <select name="level" class="form-control" ng-disabled="main.isAdmin && !userDetails.editMode " ng-model="userDetails.userData.level" required ng-options="option for option in userDetails.availableLevels"></select>
+                    <div class="error " ng-show="userform.level.$dirty && userform.level.$invalid ">
+                        <span ng-show="userform.level.$error.required ">Level is required.</span>
+                    </div>
+                </div>
+                <div class="form-group ">
+                    <span ng-class="{required: userDetails.editMode}"></span>
+                    <label for="department ">Department</label>
+                    <input type="text " class="form-control " ng-disabled="main.isAdmin && !userDetails.editMode " name="department " placeholder="Enter the department " ng-model="userDetails.userData.woffice " required>
+                    <div class="error " ng-show="userform.department.$dirty && userform.department.$invalid ">
+                        <span ng-show="userform.emailid.$error.required ">department is required.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
