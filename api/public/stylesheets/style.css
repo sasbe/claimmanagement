@@ -10,15 +10,10 @@ html {
     background: linear-gradient(to bottom right, #e6eded 40%, #31667a 75%);
     height: 100%;
 }
-
 body {
     font-family: -apple-system, BlinkMacSystemFont, "San Francisco";
     font-size: 20px;
     background: transparent;
-}
-
-.container {
-    margin-top: 10px;
 }
 
 .show-hide-message.ng-hide-remove {
@@ -38,7 +33,7 @@ fieldset[disabled] .form-control,
 
 .navbar {
     /* border-bottom: 4px solid cadetblue; */
-    background: #FFF;
+    background: #373535d4;
     border-radius: 0;
     margin-bottom: 0;
 }
@@ -282,4 +277,10 @@ table tr:nth-child(even) {
   .autocomplete-custom .item-metadata {
     display: block;
     line-height: 2;
+  }
+  .centered{
+      position: absolute;
+      transform: translate(-50%,-50%);
+      top:50%;
+      left:50%;
   }

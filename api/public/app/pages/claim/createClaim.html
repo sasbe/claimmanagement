@@ -1,18 +1,18 @@
-<div class="container" ng-hide="main.appLoading">
+<div class="container" style="background-color:#FFF; padding-bottom:30px" ng-hide="main.appLoading">
     <div class="page-header">
         <h2>Create claim</h2>
     </div>
-    <form name="addClaimForm" ng-hide="createClaim.appLoading" ng-submit="createClaim.addClaim()" novalidate>
+    <form name="addClaimForm" ng-hide="createClaim.appLoading" novalidate>
         <div class="row">
             <div class="form-group col-md-6">
                 <md-autocomplete md-menu-class="autocomplete-custom" required md-input-name="employeeno" md-selected-item="selectedItem"
-                    md-floating-label="Enter employee number" md-search-text="searchText" ng-pattern="/^[0-9]*$/" md-items="item in createClaim.getMatches(searchText)"
+                    md-floating-label="Employee number" md-search-text="searchText" ng-pattern="/^[0-9]*$/" md-items="item in createClaim.getMatches(searchText)"
                     md-item-text="item.employeenumber+''" md-selected-item-change="createClaim.selectedItemChange(item)">
                     <md-item-template>
                         <span class="item-metadata">
                             <span>
                                 Employee Number:
-                                <span  md-highlight-text="searchText"  md-highlight-flags="^i">{{item.employeenumber}}</span>
+                                <span md-highlight-text="searchText" md-highlight-flags="^i">{{item.employeenumber}}</span>
                             </span>
                             <span>
                                 Name:
@@ -80,11 +80,11 @@
             </div>
         </div>
 
-        <button type="submit" class="btn btn-primary" ng-disabled=" addClaimForm.contactnum.$invalid ||
+        <md-button ng-click="main.doLogin()" class="md-primary md-raised" ng-disabled=" addClaimForm.contactnum.$invalid ||
   addClaimForm.claimdate.$invalid|| addClaimForm.claimname.$invalid || 
    addClaimForm.claimoffice.$invalid ||  addClaimForm.claimno.$invalid || 
    addClaimForm.claimamount.$invalid || addClaimForm.employeeno.$invalid || addClaimForm.employeenumber.$error.number||
-   addClaimForm.claimamount.$error.money || addClaimForm.emailid.$error.date || !createClaim.claimData.employeeno">Add Claim</button>
+   addClaimForm.claimamount.$error.money || addClaimForm.emailid.$error.date || !createClaim.claimData.employeeno">Add Claim</md-button>
 
     </form>
 </div>

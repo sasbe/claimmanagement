@@ -1,24 +1,29 @@
-<div class="page-header">
-    <h2>Login</h2>
-</div>
-<form name="loginForm" ng-hide="main.appLoading" ng-submit="main.doLogin()" novalidate>
-    <div class="form-group">
-        <span class="required"></span>
-        <label for="employeenumber">Employee Number:</label>
-        <input type="text" class="form-control" name="employeenumber" number autofocus placeholder="Enter user number" ng-model="main.loginData.employeenumber" required>
-        <div class="error" ng-show="loginForm.employeenumber.$dirty && loginForm.employeenumber.$invalid">
-            <span ng-show="loginForm.employeenumber.$error.number || loginForm.employeenumber.$error.required">Please enter a number.</span>
+<div class="centered" ng-hide="main.appLoading" style="background-color:#FFF; padding:30px;display:inline-block;">
+    <div class="page-header">
+        <h2>Login</h2>
+    </div>
+    <form name="loginForm" novalidate>
+        <div class="form-group">
+            <md-input-container>
+                <label class="md-required">Employee Number</label>
+                <input name="employeenumber" number autofocus ng-model="main.loginData.employeenumber" required>
+                <div ng-messages="loginForm.employeenumber.$error">
+                    <div ng-message="required">This is required!</div>
+                    <div ng-message="number">Please enter number only</div>
+                </div>
+            </md-input-container>
         </div>
-    </div>
-    <div class="form-group">
-        <span class="required"></span>
-        <label for="password">Password:</label>
-        <input type="password" class="form-control" name="password" placeholder="Enter password" ng-model="main.loginData.password" required>
-        <span class="error" ng-show="loginForm.password.$dirty && loginForm.password.$invalid">
-        <span ng-show="loginForm.password.$error.required">Password is required.</span>
-        </span>
-    </div>
+        <div class="form-group">
+            <md-input-container>
+                <label class="md-required">Password</label>
+                <input type="password" name="password" ng-model="main.loginData.password" required>
+                <div ng-messages="loginForm.password.$error">
+                    <div ng-message="required">This is required!</div>
+                </div>
+            </md-input-container>
+        </div>
 
-    <button type="submit" class="btn btn-primary" ng-disabled="loginForm.employeenumber.$invalid ||  loginForm.password.$invalid || loginForm.employeenumber.$error.number">Login</button>
+        <md-button ng-click="main.doLogin()" class="md-primary md-raised" ng-disabled="loginForm.employeenumber.$invalid ||  loginForm.password.$invalid || loginForm.employeenumber.$error.number">Login</md-button>
 
-</form>
+    </form>
+</div>

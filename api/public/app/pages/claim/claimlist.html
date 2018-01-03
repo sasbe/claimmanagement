@@ -1,134 +1,138 @@
-<div class="panel panel-info" ng-hide="main.appLoading">
-    <div class="panel-heading">
-        <div class="row">
-            <h2 class="col-md-6">Claim List</h2>
-            <div class="col-md-6 text-right" style="margin-top:25px;">
-                <i class="fa fa-print" aria-hidden="true" ng-click="claims.print()"></i>
-            </div>
-        </div>
-    </div>
-
-    <div class="panel-content">
-        <div class="row filter">
-            <div class="col-md-2">
-                <i class="fa fa-filter fa-lg" aria-hidden="true" data-toggle="collapse" href="#filterContainer"></i>
-            </div>
-            <div class="col-md-10">
-                <div class="form-group col-md-6">
-                    <div class="input-group">
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>
-                        <input ng-model="claims.filter" type="text" class="form-control" name="email" placeholder="Search in page">
-                    </div>
+<div class="container " style="background-color:#FFF; padding-bottom:30px">
+    <div class="panel panel-info" ng-hide="main.appLoading">
+        <div class="panel-heading">
+            <div class="row">
+                <h2 class="col-md-6">Claim List</h2>
+                <div class="col-md-6 text-right" style="margin-top:25px;">
+                    <i class="fa fa-print" aria-hidden="true" ng-click="claims.print()"></i>
                 </div>
-                <ul class=" pagination pull-right ">
-                    <li ng-hide="claims.filters.skip==0">
-                        <a ng-click="prevPage() " ng-disabled="claims.filters.skip==0">« Prev</a>
-                    </li>
-
-                    <li ng-hide="claims.claims.length<5">
-                        <a ng-click="nextPage() ">Next »</a>
-                    </li>
-                </ul>
             </div>
         </div>
-        <div id="filterContainer" class="collapse col-md-6">
-            <form>
-                <div class="row">
 
+        <div class="panel-content">
+            <div class="row filter">
+                <div class="col-md-2">
+                    <i class="fa fa-filter fa-lg" aria-hidden="true" data-toggle="collapse" href="#filterContainer"></i>
+                </div>
+                <div class="col-md-10">
                     <div class="form-group col-md-6">
-                        <label>From:</label>
-                        <nepalidatepicker ng-model="claims.filters.fromdate"></nepalidatepicker>
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="glyphicon glyphicon-search"></i>
+                            </span>
+                            <input ng-model="claims.filter" type="text" class="form-control" name="email" placeholder="Search in page">
+                        </div>
                     </div>
-                    <div class="form-group col-md-6">
-                        <label>To:</label>
-                        <nepalidatepicker ng-model="claims.filters.todate"></nepalidatepicker>
-                    </div>
+                    <ul class=" pagination pull-right ">
+                        <li ng-hide="claims.filters.skip==0">
+                            <a ng-click="prevPage() " ng-disabled="claims.filters.skip==0">« Prev</a>
+                        </li>
+
+                        <li ng-hide="claims.claims.length<5">
+                            <a ng-click="nextPage() ">Next »</a>
+                        </li>
+                    </ul>
                 </div>
-                <div class="row filterform">
-                    <div class="col-md-6 form-group">
-                        <label>Employee No:</label>
-                        <input type="text" class="form-control " ng-model="claims.filters.empno " />
+            </div>
+            <div id="filterContainer" class="collapse col-md-6">
+                <form>
+                    <div class="row">
+
+                        <div class="form-group col-md-6">
+                            <label>From:</label>
+                            <nepalidatepicker ng-model="claims.filters.fromdate"></nepalidatepicker>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>To:</label>
+                            <nepalidatepicker ng-model="claims.filters.todate"></nepalidatepicker>
+                        </div>
                     </div>
-                    <div class="col-md-6 form-group ">
-                        <label>Claim no:</label>
-                        <input type="text " class="form-control " ng-model="claims.filters.claimno " />
+                    <div class="row filterform">
+                        <div class="col-md-6 form-group">
+                            <label>Employee No:</label>
+                            <input type="text" class="form-control " ng-model="claims.filters.empno " />
+                        </div>
+                        <div class="col-md-6 form-group ">
+                            <label>Claim no:</label>
+                            <input type="text " class="form-control " ng-model="claims.filters.claimno " />
+                        </div>
+                        <div class="col-md-6 form-group ">
+                            <label>Get all data:</label>
+                            <input type="checkbox" ng-model="getAll" />
+                        </div>
                     </div>
-                    <div class="col-md-6 form-group ">
-                        <label>Get all data:</label>
-                        <input type="checkbox" ng-model="getAll" />
+                    <div class="form-group ">
+                        <button class="btn btn-primary " ng-click="claims.applyFilter() " data-toggle="collapse" href="#filterContainer">Apply Filter</button>
                     </div>
-                </div>
-                <div class="form-group ">
-                    <button class="btn btn-primary " ng-click="claims.applyFilter() " data-toggle="collapse" href="#filterContainer">Apply Filter</button>
-                </div>
-            </form>
-        </div>
-        <div style="overflow-x:auto ">
-            <table class="table table-striped table-bordered table-hover table-condensed ">
-                <thead>
+                </form>
+            </div>
+            <div style="overflow-x:auto ">
+                <table class="table table-striped table-bordered table-hover table-condensed ">
+                    <thead>
 
-                    <th order=" 'claimno' " sort="sort " custom-sort>Claim no
-                    </th>
-                    </th>
-                    <th order=" 'empno' " sort="sort " custom-sort>Employee no:
-                    </th>
-                    </th>
-                    <th order=" 'claimdate' " sort="sort " custom-sort>Claimed Date
-                    </th>
-                    </th>
-                    <th order=" 'claimoffice' " sort="sort " custom-sort>Claim Office
-                    </th>
-                    </th>
-                    <th order=" 'claimname' " sort="sort " custom-sort>Claim Name
-                    </th>
-                    </th>
-                    <th order=" 'claimamount' " sort="sort " custom-sort>Claim Amount
-                    </th>
-                    </th>
-                    <th order=" 'contactnum' " sort="sort " custom-sort>Contact Number
-                    </th>
-                    </th>
-                    <th order=" 'dischargedate' " sort="sort " custom-sort>Discharge date
-                    </th>
-                    </th>
-                    <th order=" 'reimbursedamount' " sort="sort " custom-sort>Reimbursed amount
+                        <th order=" 'claimno' " sort="sort " custom-sort>Claim no
+                        </th>
+                        </th>
+                        <th order=" 'empno' " sort="sort " custom-sort>Employee no:
+                        </th>
+                        </th>
+                        <th order=" 'claimdate' " sort="sort " custom-sort>Claimed Date
+                        </th>
+                        </th>
+                        <th order=" 'claimoffice' " sort="sort " custom-sort>Claim Office
+                        </th>
+                        </th>
+                        <th order=" 'claimname' " sort="sort " custom-sort>Claim Name
+                        </th>
+                        </th>
+                        <th order=" 'claimamount' " sort="sort " custom-sort>Claim Amount
+                        </th>
+                        </th>
+                        <th order=" 'contactnum' " sort="sort " custom-sort>Contact Number
+                        </th>
+                        </th>
+                        <th order=" 'dischargedate' " sort="sort " custom-sort>Discharge date
+                        </th>
+                        </th>
+                        <th order=" 'reimbursedamount' " sort="sort " custom-sort>Reimbursed amount
 
-                    </th>
-                    </th>
-                    <th order=" 'remarks' " sort="sort " custom-sort>Remarks
+                        </th>
+                        </th>
+                        <th order=" 'remarks' " sort="sort " custom-sort>Remarks
 
-                    </th>
-                </thead>
-                <tbody>
-                    <tr ng-repeat="x in claims.claims | orderBy:sort.sortingOrder:sort.reverse | filter: claims.filter ">
-                        <td data-label="Claim no: ">
-                            <a ng-href="claimDetails/{{x._id}} ">{{x.claimno}}</a>
-                        </td>
-                        <td data-label="Employee no: ">{{ x.empno }}</td>
-                        <td data-label="Claim date: ">
-                            <nepalidatereadonly date="{{x.claimdate}} ">
-                            </nepalidatereadonly>
-                        </td>
-                        <td data-label="Claim office: ">{{ x.claimoffice }}</td>
-                        <td data-label="Claim name: ">{{ x.claimname }}</td>
-                        <td data-label="Claim amount: ">
-                            <nepalimoneyreadonly money="{{x.claimamount}} ">
-                            </nepalimoneyreadonly>
-                        </td>
-                        <td data-label="Contact no: ">{{ x.contactnum }}</td>
-                        <td data-label="Discharge date: ">
-                            <nepalidatereadonly date="{{x.dischargedate}} ">
-                            </nepalidatereadonly>
-                        </td>
-                        <td data-label="Reimbursed amount: ">
-                            <nepalimoneyreadonly money="{{x.reimbursedamount}} ">
-                            </nepalimoneyreadonly>
-                        </td>
+                        </th>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="x in claims.claims | orderBy:sort.sortingOrder:sort.reverse | filter: claims.filter ">
+                            <td data-label="Claim no: ">
+                                <a ng-href="claimDetails/{{x._id}} ">{{x.claimno}}</a>
+                            </td>
+                            <td data-label="Employee no: ">{{ x.empno }}</td>
+                            <td data-label="Claim date: ">
+                                <nepalidatereadonly date="{{x.claimdate}} ">
+                                </nepalidatereadonly>
+                            </td>
+                            <td data-label="Claim office: ">{{ x.claimoffice }}</td>
+                            <td data-label="Claim name: ">{{ x.claimname }}</td>
+                            <td data-label="Claim amount: ">
+                                <nepalimoneyreadonly money="{{x.claimamount}} ">
+                                </nepalimoneyreadonly>
+                            </td>
+                            <td data-label="Contact no: ">{{ x.contactnum }}</td>
+                            <td data-label="Discharge date: ">
+                                <nepalidatereadonly date="{{x.dischargedate}} ">
+                                </nepalidatereadonly>
+                            </td>
+                            <td data-label="Reimbursed amount: ">
+                                <nepalimoneyreadonly money="{{x.reimbursedamount}} ">
+                                </nepalimoneyreadonly>
+                            </td>
 
-                        <td data-label="Remarks: ">{{ x.remarks }}</td>
-                    </tr>
-                </tbody>
-            </table>
+                            <td data-label="Remarks: ">{{ x.remarks }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>

@@ -1,61 +1,60 @@
-<div class="row">
+<div class="container ">
+    <div class="row">
+        <div class="card col-md-6" ng-show="main.isLoggedIn">
+            <md-card md-theme="dark-blue" class="md-hue-1">
+                <md-card-title>
+                    <md-card-title-text>
+                        <span class="md-headline">Claims</span>
+                    </md-card-title-text>
+                    <md-card-title-media>
+                        <div class="md-media-lg card-media">
+                            <img src="images/claims.svg">
+                            </md-icon>
+                        </div>
+                    </md-card-title-media>
+                </md-card-title>
+                <md-card-actions layout="row" layout-align="start center">
+                    <md-button class="md-fab" ng-show="main.isLoggedIn" ng-href="/createClaim" aria-label="Create Claim">
+                        <md-icon md-svg-src="images/add.svg"></md-icon>
+                    </md-button>
+                    <md-button class="md-fab" ng-href="/claimList" aria-label="View claims">
+                        <md-icon md-svg-src="images/list.svg"></md-icon>
+                    </md-button>
+                </md-card-actions>
+                <md-card-content>
+                    <p>
+                        View the list of claims registered and add a claim to a user
+                    </p>
+                </md-card-content>
+            </md-card>
+        </div>
 
-    <div class="card col-md-6" ng-show="main.isLoggedIn">
-        <div class="card-header text-center">
-            <h3>Claim List</h3>
-        </div>
-        <div class="card-content">
-            <div class="card-image">
-                <a href="/claimList"> <i class="fa fa-list fa-3x" aria-hidden="true"></i></a>
-            </div>
-
-        </div>
-        <div class="card-footer text-center">
-            <span>View the list of claims registered</span>
-        </div>
-    </div>
-
-    <div class="card col-md-6" ng-show="main.isLoggedIn">
-        <div class="card-header text-center ">
-            <h3>Add Claim</h3>
-        </div>
-        <div class="card-content ">
-            <div class="card-image ">
-                <a href="/createClaim"> <i class="fa fa-plus fa-3x " aria-hidden="true "></i></a>
-            </div>
-
-        </div>
-        <div class="card-footer text-center ">
-            <span>Add a claim to a user</span>
-        </div>
-    </div>
-
-    <div class="card col-md-6 " ng-show="main.isLoggedIn && main.isAdmin">
-        <div class="card-header text-center ">
-            <h3>Add User</h3>
-        </div>
-        <div class="card-content ">
-            <div class="card-image ">
-                <a href="/register"> <i class="fa fa-plus fa-3x " aria-hidden="true "></i></a>
-            </div>
-        </div>
-        <div class="card-footer text-center ">
-            <span>Add a user in application</span>
-        </div>
-    </div>
-
-    <div class="card col-md-6" ng-show="main.isLoggedIn && main.isAdmin">
-        <div class="card-header text-center ">
-            <h3>Users List</h3>
-        </div>
-        <div class="card-content ">
-            <div class="card-image ">
-                <a href="/userList"><i class="fa fa-list fa-3x " aria-hidden="true "></i></a>
-            </div>
-
-        </div>
-        <div class="card-footer text-center ">
-            <span> View the list of users available in application</span>
+        <div class="card col-md-6">
+            <md-card md-theme="dark-purple" class="md-hue-1">
+                <md-card-title>
+                    <md-card-title-text>
+                        <span class="md-headline">Users</span>
+                    </md-card-title-text>
+                    <md-card-title-media>
+                        <div class="md-media-lg card-media">
+                            <img src="images/users.svg">
+                        </div>
+                    </md-card-title-media>
+                </md-card-title>
+                <md-card-actions layout="row" layout-align="start center">
+                    <md-button class="md-fab" ng-href="/register" aria-label="Create User">
+                        <md-icon md-svg-src="images/add.svg"></md-icon>
+                    </md-button>
+                    <md-button class="md-fab" ng-href="/userList" aria-label="Users list">
+                        <md-icon md-svg-src="images/list.svg"></md-icon>
+                    </md-button>
+                </md-card-actions>
+                <md-card-content>
+                    <p>
+                        View the list of users registered and add an user.
+                    </p>
+                </md-card-content>
+            </md-card>
         </div>
     </div>
 </div>

@@ -1,24 +1,24 @@
-<div class="panel panel-info" ng-hide="main.appLoading">
-    <div class="panel-heading">
-        User Profile
-    </div>
-    <div class="panel-content">
-        <table class="table">
-            <thead>
-                <th>User name</th>
-                <th>Email id</th>
-                <th>Employee Number</th>
-                <th>Password</th>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>{{main.userDetails.username}}</td>
-                    <td>{{main.userDetails.email}}</td>
-                    <td>{{main.userDetails.employeenumber}}
-                        <td>*********</td>
-                </tr>
+<div class="container " style="background-color:#FFF; padding-bottom:30px">
+    <div class="panel panel-info" ng-hide="main.appLoading">
+        <div class="panel-heading">
+            User Profile
+        </div>
+        <div class="panel-content">
+            <table class="table">
+                <thead>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Employee Number</th>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{main.userDetails.username}}</td>
+                        <td>{{main.userDetails.email}}</td>
+                        <td>{{main.userDetails.employeenumber}}
+                    </tr>
 
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>

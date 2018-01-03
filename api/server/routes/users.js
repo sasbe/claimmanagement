@@ -64,8 +64,8 @@ router.get('/userList', function (req, res, next) {
 router.get("/search/:searchKey", function (req, res) {
     try {
         if (req.decoded && req.decoded.role == "super" && req.params.searchKey != "undefined") {
-            let greaterThan = Number(req.params.searchKey) - 1;
-            let query = { employeenumber: { $lt: 10000, $gt: greaterThan } };
+            let empno = Number(req.params.searchKey);
+            let query = { employeenumber: { $eq: empno } };
             User.find(query, "username employeenumber", function (err, users) {
                 if (err) {
                     return res.json({
