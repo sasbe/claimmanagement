@@ -9,6 +9,10 @@
                 claimdate: (new Date()).toISOString(),
                 claimamount: 0
             };
+            if (!$scope.$parent.main.isAdmin) {
+                controllerScope.disabledAutoComplete = true;
+                $scope.selectedItem = $scope.$parent.main.userDetails.employeenumber;
+            }
             controllerScope.addClaim = function () {
                 controllerScope.claimData.sequenceName = DateObject.ISOtoNepali(controllerScope.claimData.claimdate);
                 $scope.$emit("appLoading", true);

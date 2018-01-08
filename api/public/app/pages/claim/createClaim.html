@@ -5,7 +5,7 @@
     <form name="addClaimForm" ng-hide="createClaim.appLoading" novalidate>
         <div class="row">
             <div class="form-group col-md-6">
-                <md-autocomplete md-menu-class="autocomplete-custom" required md-input-name="employeeno" md-selected-item="selectedItem"
+                <md-autocomplete ng-disabled="createClaim.disabledAutoComplete" md-menu-class="autocomplete-custom" required md-input-name="employeeno" md-selected-item="selectedItem"
                     md-floating-label="Employee number" md-search-text="searchText" ng-pattern="/^[0-9]*$/" md-items="item in createClaim.getMatches(searchText)"
                     md-item-text="item.employeenumber+''" md-selected-item-change="createClaim.selectedItemChange(item)">
                     <md-item-template>
