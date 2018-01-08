@@ -219,3 +219,4 @@ pip-log.txt
 /api/node_modules/*
 /.vscode/*
 /api/.vscode/*
+api/public/downloads/*
