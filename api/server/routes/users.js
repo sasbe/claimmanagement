@@ -231,7 +231,7 @@ router.post('/createUser', function (req, res) {
         newUser.employeenumber = employeenumber;
         newUser.level = level;
         newUser.woffice = woffice;
-        newUser.role = "single";
+        newUser.role = req.body.level? req.body.level:"single";
         newUser.save(function (err) {
             if (err) {
                 console.log(err);

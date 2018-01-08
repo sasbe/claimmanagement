@@ -6,7 +6,9 @@
         .controller('regCtrl', function($location, $timeout, User, $scope) {
             var controllerScope = this;
             controllerScope.regData = {
-                availableLevels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+                availableLevels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+                availableRoles: ["single", "super"],
+                role: "single"
             }
             controllerScope.regUser = function() {
                 $scope.$emit("appLoading", true);

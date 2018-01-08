@@ -3,7 +3,7 @@
         <h2>Employee Registration</h2>
     </div>
 
-    <form name="registerForm" ng-hide="register.appLoading" novalidate autocomplete="off">
+    <form name="registerForm" ng-hide="register.appLoading" novalidate autocomplete="off" ng-submit="register.regUser()">
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
@@ -66,6 +66,14 @@
                             <div ng-message="required">This field is reqiured!</div>
                         </div>
                     </md-input-container>
+                    <md-input-container>
+                        <label>Role</label>
+                        <md-select name="level" ng-model="register.regData.role" >
+                            <md-optgroup label="Role">
+                                <md-option ng-value="item" ng-repeat="item in register.regData.availableRoles">{{item}}</md-option>
+                            </md-optgroup>
+                        </md-select>
+                    </md-input-container>
                 </div>
                 <div class="form-group">
                     <md-input-container>
@@ -88,7 +96,7 @@
             </div>
         </div>
         <div class="row col-md-6">
-            <md-button ng-click="register.regUser()" class="md-primary md-raised" ng-disabled=" registerForm.username.$invalid ||
+            <md-button type="submit"  class="md-primary md-raised" ng-disabled=" registerForm.username.$invalid ||
   registerForm.emailid.$invalid|| registerForm.password.$invalid || 
    registerForm.department.$invalid ||  registerForm.designation.$invalid ||registerForm.phone.$invalid || registerForm.phone.$error.number ||
    registerForm.level.$invalid ||  registerForm.employeeno.$invalid || registerForm.employeeno.$error.number">Register</button>

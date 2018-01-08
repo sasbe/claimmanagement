@@ -2,7 +2,7 @@
     <div class="page-header">
         <h2>Login</h2>
     </div>
-    <form name="loginForm" novalidate>
+    <form name="loginForm" novalidate ng-submit="main.doLogin()">
         <div class="form-group">
             <md-input-container>
                 <label class="md-required">Employee Number</label>
@@ -23,7 +23,7 @@
             </md-input-container>
         </div>
 
-        <md-button ng-click="main.doLogin()" class="md-primary md-raised" ng-disabled="loginForm.employeenumber.$invalid ||  loginForm.password.$invalid || loginForm.employeenumber.$error.number">Login</md-button>
+        <md-button type="submit"  class="md-primary md-raised" ng-disabled="loginForm.employeenumber.$invalid ||  loginForm.password.$invalid || loginForm.employeenumber.$error.number">Login</md-button>
 
     </form>
 </div>

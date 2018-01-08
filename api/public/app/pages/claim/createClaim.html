@@ -2,7 +2,7 @@
     <div class="page-header">
         <h2>Create claim</h2>
     </div>
-    <form name="addClaimForm" ng-hide="createClaim.appLoading" novalidate>
+    <form name="addClaimForm" ng-hide="createClaim.appLoading" novalidate ng-submit="main.doLogin()">
         <div class="row">
             <div class="form-group col-md-6">
                 <md-autocomplete ng-disabled="createClaim.disabledAutoComplete" md-menu-class="autocomplete-custom" required md-input-name="employeeno" md-selected-item="selectedItem"
@@ -80,7 +80,7 @@
             </div>
         </div>
 
-        <md-button ng-click="main.doLogin()" class="md-primary md-raised" ng-disabled=" addClaimForm.contactnum.$invalid ||
+        <md-button type="submit"  class="md-primary md-raised" ng-disabled=" addClaimForm.contactnum.$invalid ||
   addClaimForm.claimdate.$invalid|| addClaimForm.claimname.$invalid || 
    addClaimForm.claimoffice.$invalid ||  addClaimForm.claimno.$invalid || 
    addClaimForm.claimamount.$invalid || addClaimForm.employeeno.$invalid || addClaimForm.employeenumber.$error.number||
