@@ -1,105 +1,110 @@
-<div class="container" ng-hide="main.appLoading" style="background-color:#FFF; padding-bottom:30px">
-    <div class="page-header">
-        <h2>Employee Registration</h2>
-    </div>
+<div class="container custom-container" ng-hide="main.appLoading">
+    <md-content layout-padding>
+        <md-toolbar md-theme="dark-blue" class="md-hue-2">
+            <div class="md-toolbar-tools">
+                <h2 flex md-truncate>Employee registration
+                </h2>
+            </div>
+        </md-toolbar>
 
-    <form name="registerForm" ng-hide="register.appLoading" novalidate autocomplete="off" ng-submit="register.regUser()">
-        <div class="row">
-            <div class="col-md-6">
-                <div class="form-group">
-                    <md-input-container>
-                        <label class="md-required">Employee number</label>
-                        <input name="employeeno" autofocus ng-model="register.regData.employeeno" required number>
-                        <div ng-messages="registerForm.employeeno.$error">
-                            <div ng-message="required number">Please enter a number!</div>
-                        </div>
-                    </md-input-container>
+        <form name="registerForm" ng-hide="register.appLoading" novalidate autocomplete="off" ng-submit="register.regUser()">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <md-input-container>
+                            <label class="md-required">Employee number</label>
+                            <input name="employeeno" autofocus ng-model="register.regData.employeeno" required number>
+                            <div ng-messages="registerForm.employeeno.$error">
+                                <div ng-message="required number">Please enter a number!</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <div class="form-group">
+                        <md-input-container>
+                            <label class="md-required">Employee name</label>
+                            <input name="username" ng-model="register.regData.username" required>
+                            <div ng-messages="registerForm.username.$error">
+                                <div ng-message="required">This field is reqiured!</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <div class="form-group">
+                        <md-input-container>
+                            <label class="md-required">Email</label>
+                            <input type="email" name="emailid" ng-model="register.regData.emailid" required>
+                            <div ng-messages="registerForm.emailid.$error">
+                                <div ng-message="required">This field is reqiured!</div>
+                                <div ng-message="email">Please enter valid email</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <div class="form-group">
+                        <md-input-container>
+                            <label class="md-required">Password</label>
+                            <input autocomplete="off" name="password" type="password" ng-model="register.regData.password" required>
+                            <div ng-messages="registerForm.password.$error">
+                                <div ng-message="required">This field is reqiured!</div>
+                            </div>
+                        </md-input-container>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <md-input-container>
-                        <label class="md-required">Employee name</label>
-                        <input name="username" ng-model="register.regData.username" required>
-                        <div ng-messages="registerForm.username.$error">
-                            <div ng-message="required">This field is reqiured!</div>
-                        </div>
-                    </md-input-container>
-                </div>
-                <div class="form-group">
-                    <md-input-container>
-                        <label class="md-required">Email</label>
-                        <input type="email" name="emailid" ng-model="register.regData.emailid" required>
-                        <div ng-messages="registerForm.emailid.$error">
-                            <div ng-message="required">This field is reqiured!</div>
-                            <div ng-message="email">Please enter valid email</div>
-                        </div>
-                    </md-input-container>
-                </div>
-                <div class="form-group">
-                    <md-input-container>
-                        <label class="md-required">Password</label>
-                        <input autocomplete="off" name="password" type="password" ng-model="register.regData.password" required>
-                        <div ng-messages="registerForm.password.$error">
-                            <div ng-message="required">This field is reqiured!</div>
-                        </div>
-                    </md-input-container>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <md-input-container>
+                            <label class="md-required">Designation</label>
+                            <input name="designation" ng-model="register.regData.designation" required>
+                            <div ng-messages="registerForm.designation.$error">
+                                <div ng-message="required">This field is reqiured!</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <div class="form-group">
+                        <md-input-container>
+                            <label>Level</label>
+                            <md-select name="level" ng-model="register.regData.level" required="">
+                                <md-optgroup label="Levels">
+                                    <md-option ng-value="item" ng-repeat="item in register.regData.availableLevels">{{item}}</md-option>
+                                </md-optgroup>
+                            </md-select>
+                            <div ng-messages="registerForm.level.$error">
+                                <div ng-message="required">This field is reqiured!</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container>
+                            <label>Role</label>
+                            <md-select name="level" ng-model="register.regData.role">
+                                <md-optgroup label="Role">
+                                    <md-option ng-value="item" ng-repeat="item in register.regData.availableRoles">{{item}}</md-option>
+                                </md-optgroup>
+                            </md-select>
+                        </md-input-container>
+                    </div>
+                    <div class="form-group">
+                        <md-input-container>
+                            <label class="md-required">Department</label>
+                            <input name="department" ng-model="register.regData.department" required>
+                            <div ng-messages="registerForm.department.$error">
+                                <div ng-message="required">This field is reqiured!</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <div class="form-group">
+                        <md-input-container>
+                            <label class="md-required">Phone number</label>
+                            <input name="phone" ng-model="register.regData.phone" required number>
+                            <div ng-messages="registerForm.phone.$error">
+                                <div ng-message="required">This field is reqiured!</div>
+                            </div>
+                        </md-input-container>
+                    </div>
                 </div>
             </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <md-input-container>
-                        <label class="md-required">Designation</label>
-                        <input name="designation" ng-model="register.regData.designation" required>
-                        <div ng-messages="registerForm.designation.$error">
-                            <div ng-message="required">This field is reqiured!</div>
-                        </div>
-                    </md-input-container>
-                </div>
-                <div class="form-group">
-                    <md-input-container>
-                        <label>Level</label>
-                        <md-select name="level" ng-model="register.regData.level" required="">
-                            <md-optgroup label="Levels">
-                                <md-option ng-value="item" ng-repeat="item in register.regData.availableLevels">{{item}}</md-option>
-                            </md-optgroup>
-                        </md-select>
-                        <div ng-messages="registerForm.level.$error">
-                            <div ng-message="required">This field is reqiured!</div>
-                        </div>
-                    </md-input-container>
-                    <md-input-container>
-                        <label>Role</label>
-                        <md-select name="level" ng-model="register.regData.role" >
-                            <md-optgroup label="Role">
-                                <md-option ng-value="item" ng-repeat="item in register.regData.availableRoles">{{item}}</md-option>
-                            </md-optgroup>
-                        </md-select>
-                    </md-input-container>
-                </div>
-                <div class="form-group">
-                    <md-input-container>
-                        <label class="md-required">Department</label>
-                        <input name="department" ng-model="register.regData.department" required>
-                        <div ng-messages="registerForm.department.$error">
-                            <div ng-message="required">This field is reqiured!</div>
-                        </div>
-                    </md-input-container>
-                </div>
-                <div class="form-group">
-                    <md-input-container>
-                        <label class="md-required">Phone number</label>
-                        <input name="phone" ng-model="register.regData.phone" required number>
-                        <div ng-messages="registerForm.phone.$error">
-                            <div ng-message="required">This field is reqiured!</div>
-                        </div>
-                    </md-input-container>
-                </div>
-            </div>
-        </div>
-        <div class="row col-md-6">
-            <md-button type="submit"  class="md-primary md-raised" ng-disabled=" registerForm.username.$invalid ||
+            <div class="row col-md-6">
+                <md-button type="submit" class="md-primary md-raised" ng-disabled=" registerForm.username.$invalid ||
   registerForm.emailid.$invalid|| registerForm.password.$invalid || 
    registerForm.department.$invalid ||  registerForm.designation.$invalid ||registerForm.phone.$invalid || registerForm.phone.$error.number ||
-   registerForm.level.$invalid ||  registerForm.employeeno.$invalid || registerForm.employeeno.$error.number">Register</button>
-        </div>
-    </form>
+   registerForm.level.$invalid ||  registerForm.employeeno.$invalid || registerForm.employeeno.$error.number">Register</md-button>
+            </div>
+        </form>
+    </md-content>
 </div>

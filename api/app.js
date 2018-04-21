@@ -10,6 +10,7 @@ var router = express.Router();
 var index = require('./server/routes/index');
 var users = require('./server/routes/users');
 var claims = require('./server/routes/claims');
+var widgets = require('./server/routes/widgets');
 var serverStats = require('./server/routes/serverstatus');
 var flash = require('connect-flash');
 var app = express();
@@ -35,7 +36,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/users', users);
 app.use('/claims', claims)
+app.use('/widgets', widgets);
 app.use('/serverstatus', serverStats);
+app.use('/scripts', express.static(__dirname + '/node_modules/'));
 app.use('*', index);
 
 // load mongoose package

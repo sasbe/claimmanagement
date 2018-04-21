@@ -1,7 +1,9 @@
 var express = require('express');
 var router = express.Router();
 //load user mongoose model
+var mongoose = require('mongoose');
 var User = require('../models/user');
+var Dependent = require('../models/dependents');
 var jwt = require('jsonwebtoken');
 var SECRET = "sampleapplication";
 var Claim = require('../models/claim');
@@ -34,11 +36,8 @@ router.use(function(req, res, next) {
 });
 
 router.get("/individual/:claimid", function(req, res) {
-    console.log(req.decoded);
-    console.log(req.params.claimid);
     if (req.params.claimid) {
         Claim.findById(req.params.claimid, function(err, claim) {
-            console.log(claim);
             if (err) {
                 return res.json({
                     success: false,
@@ -46,16 +45,32 @@ router.get("/individual/:claimid", function(req, res) {
                 });
             } else {
                 if (req.decoded.employeenumber === claim.empno || req.decoded.role === "super") {
-                    var access = "R"
-                    claimData = claim;
+                    var access = "R";
                     if (req.decoded && req.decoded.role === "super") {
                         access = "W";
                     }
-                    res.json({
-                        success: true,
-                        claim: claimData,
-                        access: access
-                    });
+                    Dependent.findById(claim._dependentId, function(err, dependent) {
+                        if (err) {
+                            return res.json({
+                                success: false,
+                                message: "Oops! You are trying something that is not supported"
+                            });
+                        } else if (dependent) {
+                            claim.dependentName = dependent.dependentName;
+                            return res.json({
+                                success: true,
+                                access: access,
+                                claim: claim
+                            })
+                        } else {
+                            claim.dependentName = claim.claimname;
+                            return res.json({
+                                success: true,
+                                access: access,
+                                claim: claim
+                            })
+                        }
+                    })
                 } else {
                     return res.json({
                         success: false,
@@ -110,7 +125,7 @@ router.get('/claimList', function(req, res, next) {
         }
         console.log(JSON.stringify(criteria) + req.query.fromdate + req.query.todate);
         Claim.find(
-            criteria, "empno claimno claimdate claimoffice claimname claimamount contactnum dischargedate reimbursedamount remarks", filter,
+            criteria, "empno claimno claimdate claimname claimamount dischargedate reimbursedamount", filter,
             function(err, claims) {
                 if (err) {
                     return res.json({
@@ -147,6 +162,8 @@ router.put('/updateClaim/:claimId', function(req, res) {
                 if (claim.empno === req.decoded.employeenumber || req.decoded.role === "super") {
                     claim.dischargedate = req.body.dischargedate;
                     claim.reimbursedamount = req.body.reimbursedamount;
+                    //backward compatibility
+                    claim.dependentName = claim.dependentName ? claim.dependentName : "SELF";
                     // claim.claimno = req.body.claimno;
                     claim.save(function(err) {
                         if (err) {
@@ -216,11 +233,12 @@ router.post('/addClaim', function(req, res) {
                 claimdate = req.body.claimdate,
                 claimoffice = req.body.claimoffice,
                 claimamount = req.body.claimamount,
-                contactnum = req.body.contactnum;
+                contactnum = req.body.contactnum,
+                dependentId = req.body._dependentId;
             console.log(employeeno + " " + claimname + " " + claimdate + " " + claimoffice + " " + claimamount + " " + contactnum);
             if (employeeno == null || employeeno == '' || claimdate == null || claimdate == '' ||
                 claimoffice == null || claimoffice == '' || claimamount == null || claimamount === '' || contactnum == null ||
-                contactnum == '' || claimname == null || claimname == '') {
+                contactnum == '' || claimname == null || claimname == '' || dependentId == null) {
                 return res.json({ success: false, message: "Ensure required fields were provided" })
             }
             Counter.findByIdAndUpdate({ _id: req.body.sequenceName }, { $inc: { sequence_value: 1 } }, { new: true, upsert: true, setDefaultsOnInsert: true },
@@ -249,6 +267,7 @@ router.post('/addClaim', function(req, res) {
                                 newClaims.claimamount = claimamount;
                                 newClaims.contactnum = contactnum;
                                 newClaims.empno = employeeno;
+                                newClaims._dependentId = mongoose.Types.ObjectId(dependentId)
                                 newClaims.save(function(saveErr) {
                                     if (saveErr) {
                                         return res.json({

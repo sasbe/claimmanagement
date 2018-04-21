@@ -1,0 +1,51 @@
+<md-dialog aria-label="Edit dependent">
+
+    <md-toolbar>
+        <div class="md-toolbar-tools">
+            <h2>Edit dependent</h2>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="cancel()">
+                <md-icon md-svg-src="img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+            </md-button>
+        </div>
+    </md-toolbar>
+
+    <md-dialog-content>
+        <div class="md-dialog-content">
+            <form name="dependentForm">
+                <div class="form-group ">
+                    <md-input-container>
+                        <label class="md-required">Dependent name</label>
+                        <input name="dependentname" ng-model="dependent.dependentName" required>
+                        <div ng-messages="dependentForm.dependentname.$error">
+                            <div ng-message="required">Name is required</div>
+                        </div>
+                    </md-input-container>
+                </div>
+                <div class="form-group ">
+                    <md-input-container>
+                        <label class="md-required">Relationship</label>
+                        <md-select name="relationshipType" ng-model="dependent.relationshipType" required="">
+                            <md-optgroup label="Relationship">
+                                <md-option ng-value="item" ng-repeat="item in relationshipTypes">{{item}}</md-option>
+                            </md-optgroup>
+                        </md-select>
+                        <div ng-messages="dependentForm.relationshipType.$dirty && dependentForm.relationshipType.$invalid">
+                            <span ng-message="dependentForm.relationshipType.$error.required">Relationship is required.</span>
+                        </div>
+                    </md-input-container>
+                </div>
+
+            </form>
+        </div>
+    </md-dialog-content>
+
+    <md-dialog-actions layout="row">
+        <md-button class="md-raised md-primary" ng-click="answer('save')" ng-disabled="dependentForm.dependentname.$invalid || dependentForm.relationshipType.invalid">
+            Save
+        </md-button>
+        <md-button class="md-raised md-primary" ng-click="cancel()">
+            Cancel
+        </md-button>
+    </md-dialog-actions>
+</md-dialog>

@@ -1,0 +1,38 @@
+<md-content layput-padding>
+    <md-button class="md-raised md-primary" ng-click="showEditDialog($event)">Add Widgets</md-button>
+    <div class="sa-table">
+        <div class="sa-table-header sa-table-row">
+            <div class="sa-table-header-cell sa-table-cell">
+                Name
+            </div>
+            <div class="sa-table-header-cell sa-table-cell">
+                Description
+            </div>
+            <div class="sa-table-header-cell sa-table-cell">
+                Columns
+            </div>
+            <div class="sa-table-header-cell sa-table-cell">
+                Actions
+            </div>
+        </div>
+        <div class="sa-table-body">
+            <div class="sa-table-row" ng-repeat="widget in widgets">
+                <div class="sa-table-cell">
+                    <a ng-href="/widget/{{widget._id}}">{{widget.name}}</a>
+                </div>
+                <div class="sa-table-cell">
+                    {{widget.description}}
+                </div>
+                <div class="sa-table-cell">
+                    <span class="label label-primary column-label" ng-repeat="column in widget.query">
+                        {{column.context}}.{{column.name}}
+                    </span>
+                </div>
+                <div class="sa-table-cell">
+                    <i class="fa fa-edit" ng-click="showEditDialog($event,widget)"></i>
+                    <i class="fa fa-trash" ng-click="deleteWidget(widget._id)"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</md-content>

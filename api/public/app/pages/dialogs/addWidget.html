@@ -1,0 +1,92 @@
+<md-dialog aria-label="Add Widget" class="full-screen">
+
+    <md-toolbar>
+        <div class="md-toolbar-tools">
+            <h2>Add widget</h2>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="cancel()">
+            </md-button>
+        </div>
+    </md-toolbar>
+
+    <md-dialog-content>
+        <div class="md-dialog-content">
+            <form name="widgetForm">
+                <div class="form-group col-md-6 ">
+                    <md-input-container>
+                        <label class="md-required">Name</label>
+                        <input name="name" ng-model="widget.name" required>
+                        <div ng-messages="widgetForm.name.$error">
+                            <div ng-message="required">Name is required</div>
+                        </div>
+                    </md-input-container>
+                </div>
+                <div class="form-group col-md-6">
+                    <md-input-container>
+                        <label class="md-required">Description</label>
+                        <input name="description" ng-model="widget.description" required>
+                        <div ng-messages="widgetForm.description.$error">
+                            <div ng-message="required">Name is required</div>
+                        </div>
+                    </md-input-container>
+                </div>
+                <div class="form-group col-md-6">
+                    <md-input-container>
+                        <label>Order</label>
+                        <input number name="order" ng-model="widget.order" required>
+                    </md-input-container>
+                </div>
+                <div class="form-group col-md-6">
+                    <md-input-container>
+                        <label>Limit</label>
+                        <input number name="limit" ng-model="widget.limit" required>
+                    </md-input-container>
+                </div>
+                <div class="form-group col-md-6">
+                    <md-checkbox ng-model="widget.print" aria-label="Enable Print">
+                        Enable print
+                    </md-checkbox>
+                </div>
+                <div class="col-md-8 shadow">
+                    <div ng-repeat="schema in schemadetails">
+                        <div ng-repeat="(key,value) in schema">
+                            <div class="col-md-4">
+                                {{key | uppercase}}
+                            </div>
+                            <div class="col-md-8">
+                                <ul class="list-unstyled">
+                                    <li ng-repeat="column in value">
+                                        <md-checkbox ng-click="selectColumn($event,key,column.path,column.instance)" ng-checked="hasColumn(key,column.path)">
+                                            {{column.path}}
+                                        </md-checkbox>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 shadow">
+                    <div>
+                        <ul class="list-group">
+                            <li class="list-group-item" ng-repeat="column in widget.query">
+                                <span class="label label-primary">{{column.name}}</span><span class="badge">{{column.context}}</span>
+                                <md-input-container>
+                                    <input name="displayName" ng-model="column.displayName" required>
+                                </md-input-container>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </md-dialog-content>
+
+    <md-dialog-actions layout="row">
+        <md-button class="md-raised md-primary" ng-click="answer('save')" ng-disabled="dependentForm.dependentname.$invalid || dependentForm.relationshipType.invalid">
+            Save
+        </md-button>
+        <md-button class="md-raised md-primary" ng-click="cancel()">
+            Cancel
+        </md-button>
+    </md-dialog-actions>
+</md-dialog>

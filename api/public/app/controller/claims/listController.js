@@ -27,7 +27,7 @@
                 if ($scope.getAll == true)
                     controllerScope.filters.limit = null;
                 else
-                    controllerScope.filters.limit = 5;
+                    controllerScope.filters.limit = 10;
             });
             controllerScope.filters = new Query();
 

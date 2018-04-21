@@ -1,10 +1,15 @@
-(function () {
+(function() {
     'use strict';
 
-    angular.module('userApp', ['appRoutes', 'userControllers', 'mainControllers', 'claimControllers', 'homeController', 'ClaimListControllers', 'UserListControllers',
-        'CommonDirectives', 'ClaimDetailsController', 'UserDetailsController', 'userServices', 'claimServices', 'commonServices', 'authServices', 'ngAnimate', 'ngMaterial', 'ngMessages'
-    ])
-        .config(function ($httpProvider, $mdThemingProvider) {
+    angular.module('userApp', ['appRoutes', 'userControllers', 'mainControllers', 'claimControllers',
+            'homeController', 'WidgetController', 'CustomWidgetCtrl',
+            'ClaimListControllers', 'UserListControllers',
+            'CommonDirectives', 'analyticsController', 'ClaimDetailsController',
+            'UserDetailsController', 'userServices', 'dependentService', 'claimServices', 'commonServices',
+            'authServices', 'ValueFormatter',
+            'ngAnimate', 'ngMaterial', 'ngMessages'
+        ])
+        .config(function($httpProvider, $mdThemingProvider) {
 
             $mdThemingProvider.theme('dark-purple').backgroundPalette('purple', {
                 'hue-1': '500'

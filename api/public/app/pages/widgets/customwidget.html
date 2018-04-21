@@ -1,0 +1,22 @@
+<div class="container custom-container">
+    <md-content layout-padding>
+        <md-toolbar md-theme="dark-blue" class="md-hue-2">
+            <div class="md-toolbar-tools">
+                <h2 flex md-truncate>{{description}}
+                </h2>
+            </div>
+        </md-toolbar>
+        <div class="sa-table">
+            <div class="sa-table-header sa-table-row">
+                <div class="sa-table-header-cell sa-table-cell" ng-repeat="column in columns">{{column.displayName}}</div>
+            </div>
+            <div class="sa-table-body">
+                <div class="sa-table-row" ng-repeat="record in records track by $index">
+                    <div class="sa-table-cell" ng-repeat="value in getRow(record) track by $index">
+                        {{value}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </md-content>
+</div>

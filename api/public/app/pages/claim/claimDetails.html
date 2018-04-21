@@ -1,15 +1,15 @@
-<div class="container" ng-hide="main.appLoading">
-    <div class="page-header">
-        <div class="row">
-            <h2 class="col-md-6">Detail of claim "{{ claimDetails.claimData.claimno }}"</h2>
-            <div class="col-md-6 text-right" style="margin-top:25px;">
-                <i class="fa fa-pencil-square-o" ng-class="{ 'fa-floppy-o':claimDetails.editMode}" ng-click="claimDetails.changeMode()" aria-hidden="true"></i>
-                <i class="fa fa-trash-o" aria-hidden="true" ng-show="!claimDetails.editMode" ng-click="claimDetails.deleteClaim()"></i>
-                <i class="fa fa-times" aria-hidden="true" ng-show="claimDetails.editMode" ng-click="claimDetails.cancelEdit()"></i>
+<div class="container custom-container" ng-hide="main.appLoading">
+    <md-content layout-padding>
+        <md-toolbar md-theme="dark-purple" class="md-hue-2">
+            <div class="row md-toolbar-tools">
+                <h2 class="col-md-6" flex md-truncate>Detail of claim "{{ claimDetails.claimData.claimno }}"</h2>
+                <div class="col-md-6 text-right">
+                    <i class="fa fa-pencil-square-o" ng-class="{ 'fa-floppy-o':claimDetails.editMode}" ng-click="claimDetails.changeMode()" aria-hidden="true"></i>
+                    <i class="fa fa-trash-o" aria-hidden="true" ng-show="!claimDetails.editMode" ng-click="claimDetails.deleteClaim()"></i>
+                    <i class="fa fa-times" aria-hidden="true" ng-show="claimDetails.editMode" ng-click="claimDetails.cancelEdit()"></i>
+                </div>
             </div>
-        </div>
-    </div>
-    <div class="row">
+        </md-toolbar>
         <form class="form-horizontal">
             <div class="col-md-6">
                 <div class="form-group ">
@@ -21,16 +21,9 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="control-label col-md-6 ">Claimamount no:</label>
-                    <div class="col-md-6">
-                        <p class="form-control-static ">{{claimDetails.claimData.claimno}}</p>
-                    </div>
-                </div>
-
-                <div class="form-group">
                     <label class="control-label col-md-6 ">Claim name:</label>
                     <div class="col-md-6 ">
-                        <p class="form-control-static ">{{claimDetails.claimData.name}}</p>
+                        <p class="form-control-static ">{{claimDetails.claimData.claimname}}</p>
                     </div>
 
                 </div>
@@ -61,6 +54,12 @@
                         <p class="form-control-static ">{{claimDetails.claimData.claimoffice}}</p>
                     </div>
                 </div>
+                <div class="form-group">
+                    <label class="control-label col-md-6 ">Dependent name</label>
+                    <div class="col-md-6 ">
+                        <p class="form-control-static ">{{claimDetails.claimData.dependentName}}</p>
+                    </div>
+                </div>
             </div>
             <div class="col-md-6">
                 <div class="form-group">
@@ -77,5 +76,5 @@
                 </div>
             </div>
         </form>
-    </div>
+    </md-content>
 </div>

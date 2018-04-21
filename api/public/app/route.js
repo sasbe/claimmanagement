@@ -79,6 +79,22 @@
                     controllerAs: "createClaim",
                     authencticated: true
                 })
+                .when('/analytics', {
+                    templateUrl: 'app/pages/analytics/analytics.html',
+                    controller: "analyticsCtrl",
+                    controllerAs: "analytics",
+                    authencticated: true
+                }).when('/widgetsList', {
+                    templateUrl: 'app/pages/widgets/widgets.html',
+                    controller: "widgetsCtrl",
+                    controllerAs: "widgets",
+                    authencticated: true
+                }).when('/widget/:id', {
+                    templateUrl: 'app/pages/widgets/customwidget.html',
+                    controller: "customWidgetCtrl",
+                    controllerAs: "customWidget",
+                    authencticated: true
+                })
                 .otherwise({ redirectTo: '/' });
 
             $locationProvider.html5Mode({

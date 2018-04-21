@@ -1,13 +1,13 @@
-<div class="container " ng-show="main.isLoggedIn">
-    <div class="row">
-        <div class="card col-md-6" >
-            <md-card md-theme="dark-blue" class="md-hue-1">
+<div class="container custom-container" ng-show="main.isLoggedIn">
+    <md-content layout-padding layout-xs="column" layout="row">
+        <div layout="row" class="flex-wrap">
+            <md-card md-theme="dark-blue" class="md-hue-1 col-md-4 custom-md-card">
                 <md-card-title>
                     <md-card-title-text>
                         <span class="md-headline">Claims</span>
                     </md-card-title-text>
                     <md-card-title-media>
-                        <div class="md-media-lg card-media">
+                        <div class="md-media-md card-media">
                             <img src="images/claims.svg">
                             </md-icon>
                         </div>
@@ -27,22 +27,19 @@
                     </p>
                 </md-card-content>
             </md-card>
-        </div>
-
-        <div class="card col-md-6" ng-show="main.isAdmin">
-            <md-card md-theme="dark-purple" class="md-hue-1">
+            <md-card md-theme="dark-purple" ng-show="main.isAdmin" class="md-hue-1 col-md-4 custom-md-card">
                 <md-card-title>
                     <md-card-title-text>
                         <span class="md-headline">Employees</span>
                     </md-card-title-text>
                     <md-card-title-media>
-                        <div class="md-media-lg card-media">
+                        <div class="md-media-md card-media">
                             <img src="images/users.svg">
                         </div>
                     </md-card-title-media>
                 </md-card-title>
                 <md-card-actions layout="row" layout-align="start center">
-                    <md-button class="md-fab"   ng-href="/register" aria-label="Create employee">
+                    <md-button class="md-fab" ng-href="/register" aria-label="Create employee">
                         <md-icon md-svg-src="images/add.svg"></md-icon>
                     </md-button>
                     <md-button class="md-fab" ng-href="/userList" aria-label="Users list">
@@ -55,6 +52,27 @@
                     </p>
                 </md-card-content>
             </md-card>
-        </div>
+            <md-card md-theme="getTheme($index)" ng-show="main.isAdmin" class="md-hue-1 col-md-4 custom-md-card" ng-repeat="widget in widgets">
+                <md-card-title>
+                    <md-card-title-text>
+                        <span class="md-headline">{{widget.name}}</span>
+                    </md-card-title-text>
+                    <md-card-title-media>
+                        <div class="md-media-md card-media">
+                            <img src="images/claims.svg">
+                        </div>
+                    </md-card-title-media>
+                </md-card-title>
+                <md-card-actions layout="row" layout-align="start center">
+                    <md-button class="md-fab" ng-href="/widget/{{widget._id}}" aria-label="{{widget.name}}">
+                        <md-icon md-svg-src="images/list.svg"></md-icon>
+                    </md-button>
+                </md-card-actions>
+                <md-card-content>
+                    <p>
+                        {{widget.description}}
+                    </p>
+                </md-card-content>
+            </md-card>
+    </md-content>
     </div>
-</div>

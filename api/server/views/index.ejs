@@ -14,7 +14,8 @@
     <link rel="stylesheet" href="stylesheets/style.css" />
     <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css" />
     <link rel="stylesheet" href="css/nepali.datepicker.v2.2.min.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.1.5/angular-material.min.css" />
+    <link rel="stylesheet" href="css/angular-material.min.css" />
+    <link rel="stylesheet" href="css/ui-grid.css" type="text/css">
 
     <!-- js libraries-->
     <script src="javascripts/jquery.js"></script>
@@ -23,14 +24,16 @@
     <script src="javascripts/nepali.datepicker.v2.2.min.js"></script>
     <script src="javascripts/accounting.min.js"></script>
     <!--main angular -->
-
+    <script src="/scripts/d3/dist/d3.js"></script>
     <script src="javascripts/angular.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.0/angular-aria.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-messages/1.4.0/angular-messages.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.1.5/angular-material.min.js"></script>
+    <script src="javascripts/angular-aria.min.js"></script>
+    <script src="javascripts/angular-messages.min.js"></script>
+    <script src="javascripts/angular-material.min.js"></script>
     <script src="javascripts/angular-route.js"></script>
     <script src="javascripts/angular-animate.js"></script>
     <script src="javascripts/angular-resource.js"></script>
+    <script src="javascripts/ui-grid.js"></script>
+
 
     <!--angualr config and routes-->
     <script src="app/app.js"></script>
@@ -45,14 +48,22 @@
     <script src="app/controller/claims/listController.js"></script>
     <script src="app/controller/claims/claimDetailsCtrl.js"></script>
     <script src="app/controller/users/userDetailsCtrl.js"></script>
-    <!-- andular services-->
+    <script src="app/controller/analytics/analyticsCtrl.js"></script>
+    <script src="app/controller/widgetCtrl.js"></script>
+    <script src="app/controller/customWidgetCtrl.js"></script>
+    <!-- angular services-->
     <script src="app/services/userServices.js"></script>
     <script src="app/services/authServices.js"></script>
     <script src="app/services/claimServices.js"></script>
+    <script src="app/services/widgetServices.js"></script>
     <script src="app/services/commonServices.js"></script>
+    <script src="app/services/dependentServices.js"></script>
 
     <!-- directives -->
     <script src="app/directives/commonDirectives.js"></script>
+
+    <!-- angular filters-->
+    <script src="app/filter/valueFormatter.js"></script>
 
 </head>
 
@@ -65,7 +76,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">Claim Management</a>
+                <a class="navbar-brand" href="#"><img height="30px" src="/images/claims.png"></a>
             </div>
 
             <div class="collapse navbar-collapse" id="navbarsExampleDefault">
@@ -76,17 +87,21 @@
                         </a>
                     </li>
                 </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    <li ng-show="main.isLoggedIn && main.isAdmin">
+                <ul class="nav navbar-nav navbar-right" ng-show="main.isLoggedIn">
+                    <li ng-show="main.isAdmin">
                         <a href="/register">
                             <i class="fa fa-plus" aria-hidden="true"></i> Add Employee</a>
                     </li>
+                    <li ng-show="main.isAdmin">
+                        <a href="/widgetsList">
+                            <i class="fa fa-plus" aria-hidden="true"></i> Widgets</a>
+                    </li>
 
-                    <li ng-show="main.isLoggedIn">
+                    <li>
                         <a href="/createClaim">
                             <span class="glyphicon glyphicon-log-in"></span> Add Claim</a>
                     </li>
-                    <li class="nav-item " ng-show="main.isLoggedIn" class="dropdown">
+                    <li class="nav-item " class="dropdown">
                         <a class=" dropdown-toggle " data-toggle="dropdown">
                             <span class="glyphicon glyphicon-user "></span>{{ main.userDetails.username }}
                             <span class="caret "></span>

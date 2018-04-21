@@ -1,88 +1,85 @@
-<div class="container">
-    <div class="panel panel-info">
-        <div class="panel-heading">
-            <div class="row">
+<div class="container custom-container">
+
+    <md-content ng-hide="main.appLoading">
+        <md-toolbar md-theme="dark-purple" class="md-hue-2">
+            <div class="row md-toolbar-tools">
                 <h2 class="col-md-6">Employee List</h2>
-                <div class="col-md-6 text-right" style="margin-top:25px;">
+                <div class="col-md-6 text-right">
                     <i class="fa fa-print" aria-hidden="true" ng-click="users.print()"></i>
                 </div>
             </div>
-        </div>
-
-        <div class="panel-content">
-            <div class="row filter">
-                <div class="col-md-2">
-                    <i class="fa fa-filter fa-lg" aria-hidden="true" data-toggle="collapse" href="#filterContainer"></i>
-                </div>
-                <div class="col-md-10">
-                    <div class="form-group col-md-6">
-                        <div class="input-group">
-                            <span class="input-group-addon">
+        </md-toolbar>
+    </md-content>
+    <md-content layout-padding>
+        <div class="row filter">
+            <div class="col-md-2">
+                <i class="fa fa-filter fa-lg" aria-hidden="true" data-toggle="collapse" href="#filterContainer"></i>
+            </div>
+            <div class="col-md-10">
+                <div class="form-group col-md-6">
+                    <div class="input-group">
+                        <span class="input-group-addon">
                                 <i class="glyphicon glyphicon-search"></i>
                             </span>
-                            <input ng-model="users.filter" type="text" class="form-control" name="email" placeholder="Search in page">
-                        </div>
+                        <input ng-model="users.filter" type="text" class="form-control" name="email" placeholder="Search in page">
                     </div>
-                    <ul class=" pagination pull-right ">
-                        <li ng-hide="users.filters.skip==0">
-                            <a ng-click="prevPage() " ng-disabled="users.filters.skip==0">« Prev</a>
-                        </li>
-
-                        <li ng-hide="users.users.length<5">
-                            <a ng-click="nextPage() ">Next »</a>
-                        </li>
-                    </ul>
                 </div>
-            </div>
-            <div id="filterContainer" class="collapse col-md-6">
-                <form>
-                    <div class="row filterform">
-                        <div class="col-md-6 form-group">
-                            <label>Employee number:</label>
-                            <input type="text" class="form-control " ng-model="users.filters.empno " />
-                        </div>
-                    </div>
-                    <div class="form-group ">
-                        <button class="btn btn-primary " ng-click="users.applyFilter() " data-toggle="collapse" href="#filterContainer">Apply Filter</button>
-                    </div>
-                </form>
-            </div>
-            <div style="overflow-x:auto ">
-                <table class="table table-striped table-bordered table-hover table-condensed ">
-                    <thead>
-                        <th order=" 'employeenumber' " sort="sort " custom-sort>Employee number
-                        </th>
-                        </th>
-                        <th order=" 'username' " sort="sort " custom-sort>Employee name
-                        </th>
-                        </th>
-                        <th order=" 'desgination' " sort="sort " custom-sort>Designnation
-                        </th>
-                        </th>
-                        <th order=" 'woffice' " sort="sort " custom-sort>Department
-                        </th>
-                        </th>
-                        </th>
-                        <th order=" 'level' " sort="sort " custom-sort>Level
-                        </th>
-                        </th>
-                        <th order=" 'emailid' " sort="sort " custom-sort>Email
-                        </th>
-                    </thead>
-                    <tbody>
-                        <tr ng-repeat="x in users.users | orderBy:sort.sortingOrder:sort.reverse | filter: users.filter ">
-                            <td data-label="User no: ">
-                                <a ng-href="userDetails/{{x._id}} ">{{x.employeenumber}}</a>
-                            </td>
-                            <td data-label="User name: ">{{ x.username }}</td>
-                            <td data-label="Department: ">{{x.designation}}</td>
-                            <td data-label="Desgination">{{ x.woffice }}</td>
-                            <td data-label="Level: ">{{ x.level }}</td>
-                            <td data-label="Email: ">{{ x.emailid }}</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <ul class=" pagination pull-right ">
+                    <li ng-hide="users.filters.skip==0">
+                        <a ng-click="prevPage() " ng-disabled="users.filters.skip==0">« Prev</a>
+                    </li>
+
+                    <li ng-hide="users.users.length<5">
+                        <a ng-click="nextPage() ">Next »</a>
+                    </li>
+                </ul>
             </div>
         </div>
-    </div>
+        <div id="filterContainer" class="collapse col-md-6">
+            <form>
+                <div class="row filterform">
+                    <div class="col-md-6 form-group">
+                        <label>Employee number:</label>
+                        <input type="text" class="form-control " ng-model="users.filters.empno " />
+                    </div>
+                </div>
+                <div class="form-group ">
+                    <button class="btn btn-primary " ng-click="users.applyFilter() " data-toggle="collapse" href="#filterContainer">Apply Filter</button>
+                </div>
+            </form>
+        </div>
+        <div style="overflow-x:auto ">
+            <div class="sa-table">
+                <div class="sa-table-header sa-table-row">
+                    <div class="sa-table-header-cell sa-table-cell" order=" 'employeenumber' " sort="sort " custom-sort>Employee number
+                    </div>
+                    </th>
+                    <div class="sa-table-header-cell sa-table-cell" order=" 'username' " sort="sort " custom-sort>Employee name
+                    </div>
+                    <div class="sa-table-header-cell sa-table-cell" order=" 'desgination' " sort="sort " custom-sort>Designnation
+                    </div>
+                    <div class="sa-table-header-cell sa-table-cell" order=" 'woffice' " sort="sort " custom-sort>Department
+                    </div>
+                    </th>
+                    <div class="sa-table-header-cell sa-table-cell" order=" 'level' " sort="sort " custom-sort>Level
+                    </div>
+                    <div class="sa-table-header-cell sa-table-cell" order=" 'emailid' " sort="sort " custom-sort>Email
+                    </div>
+                </div>
+                <div class="sa-table-body">
+                    <div class="sa-table-row" ng-repeat="x in users.users | orderBy:sort.sortingOrder:sort.reverse | filter: users.filter ">
+                        <div class="sa-table-cell" data-label="User no: ">
+                            <a ng-href="userDetails/{{x._id}} ">{{x.employeenumber}}</a>
+                        </div>
+                        <div class="sa-table-cell" data-label="User name: ">{{ x.username }}</div>
+                        <div class="sa-table-cell" data-label="Department: ">{{x.designation}}</div>
+                        <div class="sa-table-cell" data-label="Desgination">{{ x.woffice }}</div>
+                        <div class="sa-table-cell" data-label="Level: ">{{ x.level }}</div>
+                        <div class="sa-table-cell" data-label="Email: ">{{ x.emailid }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </md-content>
+
 </div>

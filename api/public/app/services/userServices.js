@@ -26,6 +26,7 @@
             userFactory.deleteUser = function(userid) {
                 return $http.delete("/users/deleteUser/" + userid);
             }
+
             return userFactory;
         })
 

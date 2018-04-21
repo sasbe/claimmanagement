@@ -7,9 +7,10 @@
 }
 
 html {
-    background: linear-gradient(to bottom right, #e6eded 40%, #31667a 75%);
+    /* background: linear-gradient(to bottom right, #e6eded 40%, #31667a 75%); */
     height: 100%;
 }
+
 body {
     font-family: -apple-system, BlinkMacSystemFont, "San Francisco";
     font-size: 20px;
@@ -18,6 +19,16 @@ body {
 
 .show-hide-message.ng-hide-remove {
     animation: zoomIn 0.3s both ease;
+}
+
+.custom-container {
+    border-radius: 4px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    padding: 0;
+    -webkit-transition: 0.02s padding cubic-bezier(0.35, 0, 0.25, 1);
+    transition: 0.02s padding cubic-bezier(0.35, 0, 0.25, 1);
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .2), 0 1px 1px 0 rgba(0, 0, 0, .14), 0 2px 1px -1px rgba(0, 0, 0, .12);
 }
 
 .form-control[disabled],
@@ -33,7 +44,7 @@ fieldset[disabled] .form-control,
 
 .navbar {
     /* border-bottom: 4px solid cadetblue; */
-    background: #373535d4;
+    background: #152b39;
     border-radius: 0;
     margin-bottom: 0;
 }
@@ -161,11 +172,6 @@ table tr:nth-child(even) {
     display: none;
 }
 
-.filter {
-    border-bottom: 2px solid #ececec;
-    margin: 0;
-}
-
 .filter .pagination {
     margin: 0;
 }
@@ -179,10 +185,37 @@ table tr:nth-child(even) {
     background: #31667a;
 }
 
-.card {
-    height: calc(50vh - 70px);
-    margin-top: 15px;
-    margin-bottom: 15px;
+.flex-wrap {
+    flex-wrap: wrap;
+}
+
+.custom-md-card {
+    margin: 0;
+    border: 8px solid white;
+    box-shadow: none;
+}
+
+.custom-md-card md-card-content p {
+    text-align: center;
+}
+
+@media (max-width: 991px) {
+    .custom-md-card {
+        width: 100%;
+    }
+    .custom-md-card md-card-content p {
+        text-align: start;
+    }
+}
+
+
+/* .card {
+    display: flex;
+    display: -webkit-flex;
+    flex-direction: row;
+    align-items: stretch;
+    -webkit-flex-direction: row;
+    flex-wrap: wrap;
 }
 
 .card h3 {
@@ -215,10 +248,19 @@ table tr:nth-child(even) {
     background: #FFF;
     height: calc(10vh - 18px);
     background: #fff;
-}
+} */
 
 .form-horizontal .control-label {
     text-align: left;
+}
+
+.chart div {
+    font: 10px sans-serif;
+    background-color: steelblue;
+    text-align: right;
+    padding: 3px;
+    margin: 1px;
+    color: white;
 }
 
 @media all and (max-width: 768px) {
@@ -270,17 +312,84 @@ table tr:nth-child(even) {
     padding-top: 8px;
     padding-bottom: 8px;
     white-space: normal;
-  }
-  .autocomplete-custom li:last-child {
+}
+
+.autocomplete-custom li:last-child {
     border-bottom-width: 0;
-  }
-  .autocomplete-custom .item-metadata {
+}
+
+.autocomplete-custom .item-metadata {
     display: block;
     line-height: 2;
-  }
-  .centered{
-      position: absolute;
-      transform: translate(-50%,-50%);
-      top:50%;
-      left:50%;
-  }
+}
+
+.centered {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    left: 50%;
+}
+
+.form-horizontal,
+.row,
+.form-horizontal .form-group {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.dependent-grid,
+.dependent-grid .ui-grid-viewport {
+    width: 100%;
+    height: auto !important;
+    overflow-x: hidden !important;
+}
+
+
+/* custom table*/
+
+.sa-table,
+.shadow {
+    background: #FFF;
+    -webkit-box-shadow: 0 5px 5px -3px rgba(0, 0, 0, .2), 0 8px 10px 1px rgba(0, 0, 0, .14), 0 3px 14px 2px rgba(0, 0, 0, .12);
+    box-shadow: 0 5px 5px -3px rgba(0, 0, 0, .2), 0 8px 10px 1px rgba(0, 0, 0, .14), 0 3px 14px 2px rgba(0, 0, 0, .12);
+}
+
+.sa-table-header .sa-table-cell {
+    font-weight: bold;
+    color: rgba(0, 0, 0, .54)
+}
+
+.sa-table-row {
+    display: flex;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: rgba(0, 0, 0, .12);
+    align-items: center;
+    padding: 0 24px;
+    box-sizing: border-box;
+    min-height: 48px;
+}
+
+.sa-table-header {
+    min-height: 56px;
+}
+
+.sa-table-cell {
+    flex: 1;
+    overflow: hidden;
+    word-wrap: break-word;
+    font-size: 17px;
+}
+
+.sa-table-body .sa-table-row:nth-child(odd) {
+    background-color: rgba(0, 0, 0, 0.02);
+}
+
+md-dialog.full-screen {
+    width: 100%;
+}
+
+.column-label {
+    display: inline-block;
+    margin: 2px;
+}

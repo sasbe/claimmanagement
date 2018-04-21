@@ -6,7 +6,7 @@
         .factory('Query', function() {
             function QueryObject() {
                 this.skip = 0;
-                this.limit = 5;
+                this.limit = 10;
                 this.fromDate = null;
                 this.todate = (new Date()).toISOString();
                 this.dateType = "claimdate";

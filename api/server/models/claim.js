@@ -1,6 +1,5 @@
 var mongoose = require('mongoose');
 
-
 var claimSchema = mongoose.Schema({
     claimno: { type: Number, required: true },
     claimdate: { type: Date, required: true },
@@ -12,6 +11,7 @@ var claimSchema = mongoose.Schema({
     reimbursedamount: { type: Number },
     remarks: { type: String },
     empno: { type: Number, required: true, lowercase: true },
+    _dependentId: { type: mongoose.Schema.Types.ObjectId, required: true },
     completed: { type: Boolean }
 });
 

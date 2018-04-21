@@ -9,6 +9,8 @@
                 claimdate: (new Date()).toISOString(),
                 claimamount: 0
             };
+            $scope.selectedDependent = "SELF";
+            controllerScope.disabledDependent = true;
             if (!$scope.$parent.main.isAdmin) {
                 controllerScope.disabledAutoComplete = true;
                 $scope.selectedItem = $scope.$parent.main.userDetails.employeenumber;
@@ -37,13 +39,34 @@
                         return data.data.users;
                     });
             };
+            controllerScope.getMatchedDependents = function (searchText) {
+                return $http
+                    .get('/users/dependents/search/' + searchText +'?employeeid='+controllerScope.empID)
+                    .then(function (data) {
+                        // Map the response object to the data object.
+                        data.data.dependents.push({ dependentName: "SELF", relationshipType: "OWN" });
+                        return data.data.dependents;
+                    });
+            };
 
             controllerScope.selectedItemChange = function (item) {
                 if (item) {
                     controllerScope.claimData.employeeno = item.employeenumber;
+                    controllerScope.empID = item._id;
+                    controllerScope.disabledDependent = false;
                 }
                 else {
                     controllerScope.claimData.employeeno = "";
+                    controllerScope.disabledDependent = true;
+                    controllerScope.empID = "";
+                }
+            }
+            controllerScope.selectedDependentChange = function (item) {
+                if (item) {
+                    controllerScope.claimData._dependentId = item._id;
+                }
+                else {
+                    controllerScope.claimData._dependentId = "SELF";
                 }
             }
         })

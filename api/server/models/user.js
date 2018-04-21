@@ -10,7 +10,10 @@ var userSchema = mongoose.Schema({
     level: { type: Number, required: true },
     woffice: { type: String, required: true, uppercase: true },
     role: { type: String, required: true, uppercase: true },
-    phone: { type: String }
+    phone: { type: String },
+    bankname: { type: String },
+    bankacnumber: { type: String },
+    bankbranch: {type: String}
 });
 
 

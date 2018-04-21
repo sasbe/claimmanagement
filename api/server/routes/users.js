@@ -1,19 +1,20 @@
 var express = require('express');
 var router = express.Router();
 //load user mongoose model
+var mongoose = require('mongoose');
 var User = require('../models/user');
+var Dependent = require('../models/dependents');
 var jwt = require('jsonwebtoken');
 var SECRET = "sampleapplication";
 var excludePath = ['/users/authenticate'];
 
-router.use(function (req, res, next) {
-    console.log("middle ware");
+router.use(function(req, res, next) {
     if (excludePath.indexOf(req.originalUrl) != -1) {
         next();
     } else {
         var token = req.body.token || req.body.query || req.headers['x-access-token'];
         if (token) {
-            jwt.verify(token, SECRET, function (err, decoded) {
+            jwt.verify(token, SECRET, function(err, decoded) {
                 if (err) {
                     res.json({ success: false, message: "Invalid token" });
                 } else {
@@ -26,7 +27,7 @@ router.use(function (req, res, next) {
         }
     }
 });
-router.get('/userList', function (req, res, next) {
+router.get('/userList', function(req, res, next) {
     // forming query criteria
     if (req.decoded && req.decoded.role === "super") {
         var filter = {};
@@ -43,7 +44,7 @@ router.get('/userList', function (req, res, next) {
 
         User.find(
             criteria, "username emailid employeenumber designation level woffice role", filter,
-            function (err, users) {
+            function(err, users) {
                 if (err) {
                     return res.json({
                         success: false,
@@ -61,12 +62,12 @@ router.get('/userList', function (req, res, next) {
     }
 
 });
-router.get("/search/:searchKey", function (req, res) {
+router.get("/search/:searchKey", function(req, res) {
     try {
         if (req.decoded && req.decoded.role == "super" && req.params.searchKey != "undefined") {
             let empno = Number(req.params.searchKey);
             let query = { employeenumber: { $eq: empno } };
-            User.find(query, "username employeenumber", function (err, users) {
+            User.find(query, "_id username employeenumber", function(err, users) {
                 if (err) {
                     return res.json({
                         users: []
@@ -78,16 +79,15 @@ router.get("/search/:searchKey", function (req, res) {
                 }
             });
         }
-    }
-    catch (e) {
+    } catch (e) {
         return res.json({
             users: []
         });
     }
 });
-router.get("/individual/:userid", function (req, res) {
+router.get("/individual/:userid", function(req, res) {
     if (req.decoded && req.decoded.role == "super" && req.params.userid != "undefined") {
-        User.findById(req.params.userid, function (err, user) {
+        User.findById(req.params.userid, function(err, user) {
             if (err) {
                 return res.json({
                     success: false,
@@ -105,7 +105,9 @@ router.get("/individual/:userid", function (req, res) {
         return res.redirect('/');
     }
 });
-router.put('/updateUser/:userId', function (req, res) {
+
+
+router.put('/updateUser/:userId', function(req, res) {
     if (req.decoded && req.decoded.role === "super") {
 
         var update = req.body.user;
@@ -116,7 +118,7 @@ router.put('/updateUser/:userId', function (req, res) {
             level: update.level,
             woffice: update.woffice,
             phone: update.phone
-        }, function (err, user) {
+        }, function(err, user) {
             if (err) {
                 return res.json({
                     success: false,
@@ -134,10 +136,10 @@ router.put('/updateUser/:userId', function (req, res) {
     }
 });
 
-router.post('/changePassword/:userId', function (req, res) {
+router.post('/changePassword/:userId', function(req, res) {
     console.log("dasd" + req.params.userId)
     if (req.decoded && req.decoded.employeenumber == req.params.userId) {
-        User.findOne({ employeenumber: req.params.userId }, function (err, user) {
+        User.findOne({ employeenumber: req.params.userId }, function(err, user) {
             console.log(user)
             if (err) {
                 return res.json({
@@ -147,7 +149,7 @@ router.post('/changePassword/:userId', function (req, res) {
             } else if (req.body && user && user.comparePassword(req.body.oldP || "") &&
                 req.body.newP == req.body.confirmP) {
                 user.password = req.body.newP;
-                user.save(function (err) {
+                user.save(function(err) {
                     if (err) {
                         return res.json({
                             success: false,
@@ -175,11 +177,11 @@ router.post('/changePassword/:userId', function (req, res) {
     }
 });
 
-router.post('/authenticate', function (req, res) {
+router.post('/authenticate', function(req, res) {
     console.log(req.body.employeenumber);
     User.findOne({
         employeenumber: req.body.employeenumber
-    }, 'username emailid password employeenumber role', function (err, user) {
+    }, 'username emailid password employeenumber role', function(err, user) {
         if (err) {
             return res.json({ success: false, message: err });
         } else {
@@ -207,7 +209,7 @@ router.post('/authenticate', function (req, res) {
     });
 });
 
-router.post('/createUser', function (req, res) {
+router.post('/createUser', function(req, res) {
     if (req.decoded && req.decoded.role === "super") {
         var username = req.body.username,
             password = req.body.password,
@@ -231,8 +233,8 @@ router.post('/createUser', function (req, res) {
         newUser.employeenumber = employeenumber;
         newUser.level = level;
         newUser.woffice = woffice;
-        newUser.role = req.body.level? req.body.level:"single";
-        newUser.save(function (err) {
+        newUser.role = req.body.level ? req.body.level : "single";
+        newUser.save(function(err) {
             if (err) {
                 console.log(err);
                 return res.json({
@@ -257,7 +259,7 @@ router.post('/createUser', function (req, res) {
 
 
 //give the user profile
-router.post('/me', function (req, res) {
+router.post('/me', function(req, res) {
     console.log(req.decoded);
     res.send({
         success: true,
@@ -266,11 +268,11 @@ router.post('/me', function (req, res) {
 });
 
 
-router.delete("/deleteUser/:id", function (req, res) {
+router.delete("/deleteUser/:id", function(req, res) {
     if (req.decoded && req.decoded.role === "super") {
         var id = req.params.id;
         if (id != undefined) {
-            User.findByIdAndRemove(id, function (err) {
+            User.findByIdAndRemove(id, function(err) {
                 if (!err) {
                     return res.json({
                         success: true,
@@ -295,6 +297,148 @@ router.delete("/deleteUser/:id", function (req, res) {
         return res.json({
             success: false,
             message: "Oops! You are trying something that is not supported"
+        });
+    }
+});
+
+router.post('/dependents/:userId', function(req, res) {
+    if (req.decoded && req.decoded.role === "super" && req.body.dependentName && req.body.relationshipType) {
+        let dependent = new Dependent();
+        dependent.employeeid = mongoose.Types.ObjectId(req.params.userId);
+        dependent.dependentName = req.body.dependentName;
+        dependent.relationshipType = req.body.relationshipType;
+        dependent.save(function(err) {
+            if (err) {
+                return res.json({
+                    success: false,
+                    message: "Server failure. Please contact the administrator"
+                });
+            } else {
+                return res.json({
+                    success: true
+                });
+            }
+        });
+    } else {
+        res.json({
+            success: false,
+            message: "Oops! You are trying something that is not supported"
+        });
+
+    }
+});
+
+//dependents api
+router.get("/dependents/:userid", function(req, res) {
+    if (req.decoded && req.decoded.role == "super" && req.params.userid != "undefined") {
+        Dependent.find({ employeeid: req.params.userid }, function(err, dependents) {
+            if (err) {
+                return res.json({
+                    success: false,
+                    message: "Something went wrong. Please contact the administrator"
+                });
+            } else {
+                res.json({
+                    success: true,
+                    dependents: dependents
+                });
+            }
+        });
+    } else {
+        return res.json({
+            success: false,
+            message: "Oops! You are trying something that is not supported"
+        });
+    }
+});
+
+//dependents api
+router.put("/dependents/:userid", function(req, res) {
+    if (req.decoded && req.decoded.role == "super" && req.params.userid != "undefined" && req.body._id) {
+        Dependent.findById(req.body._id, function(err, dependent) {
+            if (err) {
+                return res.json({
+                    success: false,
+                    message: "Something went wrong. Please contact the administrator"
+                });
+            } else {
+                if (req.body.relationshipType) {
+                    dependent.relationshipType = req.body.relationshipType;
+                }
+                if (req.body.dependentName) {
+                    dependent.dependentName = req.body.dependentName;
+                }
+                dependent.save(function(err) {
+                    if (err) {
+                        return res.json({
+                            success: false,
+                            message: "Something went wrong. Please contact the administrator"
+                        });
+                    } else {
+                        res.json({
+                            success: true,
+                        });
+                    }
+                });
+            }
+        });
+    } else {
+        return res.json({
+            success: false,
+            message: "Oops! You are trying something that is not supported"
+        });
+    }
+});
+
+router.delete("/dependents/:dependentId", function(req, res) {
+    if (req.decoded && req.decoded.role == "super" && req.params.dependentId != "undefined") {
+        Dependent.findByIdAndRemove(req.params.dependentId, function(err) {
+            if (err) {
+                return res.json({
+                    success: false,
+                    message: "Something went wrong. Please contact the administrator"
+                });
+            } else {
+                res.json({
+                    success: true,
+                });
+            }
+        })
+    } else {
+        return res.json({
+            success: false,
+            message: "Oops! You are trying something that is not supported"
+        });
+    }
+});
+
+router.get("/dependents/search/:searchKey", function(req, res) {
+    try {
+        if (req.decoded && req.decoded.role == "super" && req.params.searchKey != "undefined" && req.query.employeeid) {
+            let searchKey = req.params.searchKey;
+            let employeeid = mongoose.Types.ObjectId(req.query.employeeid);
+            let query = {
+                dependentName: {
+                    '$regex': `.*${searchKey}.*`,
+                    '$options': 'gi'
+                },
+                employeeid: employeeid
+            };
+            Dependent.find(query, "_id dependentName relationshipType", function(err, dependents) {
+                if (err) {
+                    return res.json({
+                        dependents: []
+                    });
+                } else {
+                    res.json({
+                        dependents: dependents
+                    });
+                }
+            });
+        }
+    } catch (e) {
+        return res.json({
+            dependents: []
         });
     }
 });
