@@ -78,7 +78,7 @@
                 <a class="navbar-brand" href="#"><img height="30px" src="/images/claims.png"></a>
             </div>
 
-            <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+            <div class="collapse navbar-collapse" id="navbarsExampleDefault" ng-if="main.isLoggedIn">
                 <ul class="navbar-nav nav">
                     <li class="nav-item ">
                         <a class="nav-link" href="/">Home
@@ -86,7 +86,7 @@
                         </a>
                     </li>
                 </ul>
-                <ul class="nav navbar-nav navbar-right" ng-show="main.isLoggedIn">
+                <ul class="nav navbar-nav navbar-right">
                     <li ng-show="main.isAdmin">
                         <a href="/register">
                             <i class="fa fa-plus" aria-hidden="true"></i> Add Employee</a>
