@@ -11,6 +11,12 @@ var util = require('../utils/commonutil').getInstance();
 var jwt = require('jsonwebtoken');
 var SECRET = "sampleapplication";
 
+var async = require('async');
+var officegen = require('officegen');
+
+var fs = require('fs');
+var path = require('path');
+
 router.use(function(req, res, next) {
     try {
         var token = req.body.token || req.body.query || req.headers['x-access-token'];
@@ -92,7 +98,9 @@ router.put('/', function(req, res) {
 });
 router.get('/', function(req, res, next) {
     if (req.decoded && req.decoded.role === "super") {
-        Widget.find(function(err, widgets) {
+        Widget.find({}, "", {
+            sort: { order: 1 }
+        }, function(err, widgets) {
             if (err) {
                 return res.json({
                     success: false,
@@ -157,19 +165,21 @@ router.delete("/:id", function(req, res) {
 
 router.get('/widgetlist', function(req, res, next) {
     if (req.decoded && req.decoded.role === "super") {
-        Widget.find({}, "name description _id", function(err, widgets) {
-            if (err) {
-                return res.json({
-                    success: false,
-                    message: "Server failure. Please contact the administrator"
-                });
-            } else {
-                return res.json({
-                    success: true,
-                    "widgets": widgets
-                });
-            }
-        })
+        Widget.find({}, "name description _id", { sort: { order: 1 } },
+
+            function(err, widgets) {
+                if (err) {
+                    return res.json({
+                        success: false,
+                        message: "Server failure. Please contact the administrator"
+                    });
+                } else {
+                    return res.json({
+                        success: true,
+                        "widgets": widgets
+                    });
+                }
+            })
     } else {
         //don't show widget to non-super user
         return res.json({
@@ -189,12 +199,13 @@ router.get('/:id', function(req, res, next) {
                 });
             } else {
                 //get claim table record
-                Claim.aggregate(QueryMapper.buildQuery(widget.query)).exec(function(err, results) {
+                Claim.aggregate(QueryMapper.buildQuery(widget.query, widget.limit, req.query.skip)).exec(function(err, results) {
                     if (!err) {
                         return res.json({
                             success: true,
                             columns: widget.query,
                             limit: widget.limit,
+                            print: widget.print,
                             records: results,
                             description: widget.description
                         })
@@ -209,6 +220,76 @@ router.get('/:id', function(req, res, next) {
             message: "Oops! You are trying something that is not supported"
         });
     }
-})
+});
+
+router.post("/print", function(req, res, next) {
+    var docx = officegen({
+        type: 'docx',
+        subject: 'Claim list',
+        author: 'NTC',
+        orientation: 'landscape'
+
+    });
+
+    docx.on('error', function(err) {
+        return res.json({ success: false, message: "File can not be downloaded, please contact the administrator" });
+    });
+
+
+
+    var header = docx.getHeader().createP();
+    header.addImage('public/downloads/ntc.png');
+    header.addText("Nepal Telecom", {
+        align: "Center",
+        font_size: 15,
+        font_face: 'Times New Roman',
+        bold: true
+    });
+    header.addHorizontalLine();
+    var headerStyle = {
+        b: true,
+        fontFamily: "FONTASY_ HIMALI_ TT",
+        sz: '22'
+    };
+    var tableStyle = {
+        tableAlign: "left",
+        tableFontFamily: "Calibri",
+        borders: true,
+        tableColWidth: 3000,
+        tableSize: 22
+    }
+    var columns = req.body.columns;
+    var headers = [];
+    columns.forEach(element => {
+        headers.push({
+            val: element.displayName,
+            opts: headerStyle
+        })
+    });
+    var tableContent = [headers].concat(req.body.tableContent);
+    var pObj = docx.createTable(tableContent, tableStyle);
+    var out = fs.createWriteStream('public/downloads/out.docx', { flags: 'w' });
+
+    out.on('error', function(err) {
+        return res.json({ success: false, message: "File can not be downloaded, please contact the administrator" });
+    });
+
+    async.parallel([
+        function(done) {
+            out.on('close', function() {
+                console.log('Finish to create a DOCX file.');
+                res.json({ success: true, url: "downloads/out.docx" });
+            });
+            docx.generate(out);
+        }
+
+    ], function(err) {
+        if (err) {
+            return res.json({ success: false, message: "File can not be downloaded, please contact the administrator" });
+        } // Endif.
+    });
+
+});
+
 
 module.exports = router;

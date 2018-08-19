@@ -2,10 +2,25 @@
     <md-content layout-padding>
         <md-toolbar md-theme="dark-blue" class="md-hue-2">
             <div class="md-toolbar-tools">
-                <h2 flex md-truncate>{{description}}
+                <h2 flex md-truncate>
+                    {{description}}
                 </h2>
+                <div class="pull-right text-right">
+                    <i class="fa fa-print" aria-hidden="true" ng-show="print" ng-click="doPrint()"></i>
+                </div>
             </div>
         </md-toolbar>
+        <div class="row filter">
+            <ul class=" pagination pull-right ">
+                <li ng-hide="skip==0">
+                    <a ng-click="prevPage() ">« Prev</a>
+                </li>
+
+                <li ng-hide="records.length<20">
+                    <a ng-click="nextPage()">Next »</a>
+                </li>
+            </ul>
+        </div>
         <div class="sa-table">
             <div class="sa-table-header sa-table-row">
                 <div class="sa-table-header-cell sa-table-cell" ng-repeat="column in columns">{{column.displayName}}</div>

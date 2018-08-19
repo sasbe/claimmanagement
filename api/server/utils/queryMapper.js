@@ -10,8 +10,8 @@ QueryMapper.getColumnName = function(tableName, query, type = "name") {
     }
     return columns;
 }
-QueryMapper.buildQuery = function(query) {
-    let queries = [{ '$limit': Number(query.limit || 10) }];
+QueryMapper.buildQuery = function(query, limit, skip) {
+    let queries = [{ '$skip': Number(skip || 0) }, { '$limit': Number(limit || 10) }];;
     let info = this.populateInfo(query);
     if (info.hasUsers) {
         queries.push({
@@ -19,7 +19,7 @@ QueryMapper.buildQuery = function(query) {
                 from: 'users',
                 localField: 'empno',
                 foreignField: 'employeenumber',
-                as: 'users'
+                as: 'user'
             }
         });
     }
@@ -32,9 +32,9 @@ QueryMapper.buildQuery = function(query) {
                 as: 'dependents'
             }
         });
-    }
 
-    queries.push({ $project: info.project });
+    }
+    query.push({ $project: info.project });
     return queries;
 
 }

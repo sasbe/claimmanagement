@@ -386,10 +386,14 @@ table tr:nth-child(even) {
 }
 
 md-dialog.full-screen {
-    width: 100%;
+    max-height: 85%;
 }
 
 .column-label {
     display: inline-block;
     margin: 2px;
+}
+
+.ui-sortable .list-group-item {
+    user-select: none;
 }

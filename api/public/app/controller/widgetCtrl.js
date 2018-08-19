@@ -2,8 +2,8 @@
     'use strict';
 
     angular
-        .module('WidgetController', ['widgetServices', 'ngMaterial'])
-        .controller('widgetsCtrl', function(Widget, $mdDialog, $scope) {
+        .module('WidgetController', ['widgetServices', 'ngMaterial', 'commonServices'])
+        .controller('widgetsCtrl', function(Widget, $mdDialog, util, $scope) {
             var controllerScope = this;
             $scope.getWidgets = function() {
                 Widget.getWidgets().then(function(response) {
@@ -28,7 +28,8 @@
                                 templateUrl: 'app/pages/dialogs/addWidget.html',
                                 parent: angular.element(document.body),
                                 targetEvent: ev,
-                                clickOutsideToClose: true
+                                clickOutsideToClose: true,
+                                onComplete: setupSortable
                             })
                             .then(function(widget) {
                                 if (widget._id) {
@@ -46,7 +47,8 @@
                             templateUrl: 'app/pages/dialogs/addWidget.html',
                             parent: angular.element(document.body),
                             targetEvent: ev,
-                            clickOutsideToClose: true
+                            clickOutsideToClose: true,
+                            onComplete: setupSortable
                         })
                         .then(function(widget) {
                             if (widget._id) {
@@ -166,5 +168,24 @@
                     }
                 }
             }
+
+            function setupSortable(scope, element, options) {
+                var oldIndex = -1;
+                element.find(".list-group").sortable({
+                    placeholder: "ui-state-highlight",
+                    containment: "parent",
+                    start: function(event, ui) {
+                        oldIndex = ui.item.parent().children().index(ui.item.get(0));
+                    },
+                    stop: function(event, ui) {
+                        var newIndex = ui.item.parent().children().index(ui.item.get(0));
+                        if (newIndex != oldIndex) {
+                            util.ArrayMove(scope.widget.query, oldIndex, newIndex);
+                        }
+                        oldIndex = -1;
+                    }
+                });
+            }
+
         });
 }());

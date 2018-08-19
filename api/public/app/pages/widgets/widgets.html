@@ -12,6 +12,15 @@
                 Columns
             </div>
             <div class="sa-table-header-cell sa-table-cell">
+                Order
+            </div>
+            <div class="sa-table-header-cell sa-table-cell">
+                Enable print
+            </div>
+            <div class="sa-table-header-cell sa-table-cell">
+                Limit
+            </div>
+            <div class="sa-table-header-cell sa-table-cell">
                 Actions
             </div>
         </div>
@@ -27,6 +36,15 @@
                     <span class="label label-primary column-label" ng-repeat="column in widget.query">
                         {{column.context}}.{{column.name}}
                     </span>
+                </div>
+                <div class="sa-table-cell">
+                    {{widget.order}}
+                </div>
+                <div class="sa-table-cell">
+                    {{widget.print}}
+                </div>
+                <div class="sa-table-cell">
+                    {{widget.limit}}
                 </div>
                 <div class="sa-table-cell">
                     <i class="fa fa-edit" ng-click="showEditDialog($event,widget)"></i>

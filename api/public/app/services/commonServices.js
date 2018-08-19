@@ -53,6 +53,25 @@
                 return isoValue;
             }
             return dateObject;
+        }).factory('util', function() {
+            var util = {
+
+            }
+            util.ArrayMove = function ArrayMove(array, from, to) {
+                if (Math.abs(from - to) > 60) {
+                    array.splice(to, 0, array.splice(from, 1)[0]);
+                } else {
+                    // works better when we are not moving things very far
+                    var target = array[from];
+                    var inc = (to - from) / Math.abs(to - from);
+                    var current = from;
+                    for (; current != to; current += inc) {
+                        array[current] = array[current + inc];
+                    }
+                    array[to] = target;
+                }
+            }
+            return util;
         })
 
 

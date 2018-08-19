@@ -309,8 +309,7 @@ router.post('/addClaim', function(req, res) {
 
 });
 
-router.post('/print', function(req, res) {
-    console.log(true);
+router.post('/print', function(req, res, next) {
     var docx = officegen({
         type: 'docx',
         orientation: 'landscape'

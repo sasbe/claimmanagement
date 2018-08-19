@@ -25,8 +25,12 @@
                 return $http.get(this.baseUrl + "/widgetlist")
             }
 
-            this.getWidgetDetails = function(widgetID) {
-                return $http.get(this.baseUrl + "/" + widgetID);
+            this.getWidgetDetails = function(widgetID, skip) {
+                return $http.get(this.baseUrl + "/" + widgetID + "?skip=" + skip);
+            }
+
+            this.print = function(columns, tableContent) {
+                return $http.post(this.baseUrl + "/print", { columns: columns, tableContent: tableContent });
             }
         })
 

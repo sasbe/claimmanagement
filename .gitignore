@@ -227,3 +227,5 @@ api/public/javascripts/ui-grid.js
 api/public/downloads/out.docx
 api/public/downloads/out.docx
 api/package-lock.json
+api/public/downloads/out.docx
+api/public/javascripts/jquery-ui/*
