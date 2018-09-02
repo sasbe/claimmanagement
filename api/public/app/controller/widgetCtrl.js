@@ -1,12 +1,12 @@
-(function() {
+(function () {
     'use strict';
 
     angular
         .module('WidgetController', ['widgetServices', 'ngMaterial', 'commonServices'])
-        .controller('widgetsCtrl', function(Widget, $mdDialog, util, $scope) {
+        .controller('widgetsCtrl', function (Widget, $mdDialog, util, $scope) {
             var controllerScope = this;
-            $scope.getWidgets = function() {
-                Widget.getWidgets().then(function(response) {
+            $scope.getWidgets = function () {
+                Widget.getWidgets().then(function (response) {
                     $scope.$emit("appLoading", true);
                     if (response.data.success) {
                         $scope.$emit("appLoading", false);
@@ -14,35 +14,16 @@
                     } else {
                         $scope.$emit("errorReceived", response.data.message);
                     }
-                }, function(response) {
+                }, function (response) {
                     $scope.$emit("errorReceived", response.statusText);
                 });
             }
-            $scope.showEditDialog = function(ev, widget) {
+            $scope.showEditDialog = function (ev, widget) {
                 //Get the index of selected row from row object
                 if (!$scope.schemadetails) {
-                    Widget.getSchemaDetails().then(function(response) {
+                    Widget.getSchemaDetails().then(function (response) {
                         $scope.schemadetails = response.data.schemas;
                         $mdDialog.show({
-                                controller: controller(widget, $scope.schemadetails),
-                                templateUrl: 'app/pages/dialogs/addWidget.html',
-                                parent: angular.element(document.body),
-                                targetEvent: ev,
-                                clickOutsideToClose: true,
-                                onComplete: setupSortable
-                            })
-                            .then(function(widget) {
-                                if (widget._id) {
-                                    $scope.saveWidget(widget);
-                                } else {
-                                    $scope.addWidget(widget);
-                                }
-                            }, function() {
-                                console.log("dialog closed");
-                            });
-                    })
-                } else {
-                    $mdDialog.show({
                             controller: controller(widget, $scope.schemadetails),
                             templateUrl: 'app/pages/dialogs/addWidget.html',
                             parent: angular.element(document.body),
@@ -50,20 +31,39 @@
                             clickOutsideToClose: true,
                             onComplete: setupSortable
                         })
-                        .then(function(widget) {
+                            .then(function (widget) {
+                                if (widget._id) {
+                                    $scope.saveWidget(widget);
+                                } else {
+                                    $scope.addWidget(widget);
+                                }
+                            }, function () {
+                                console.log("dialog closed");
+                            });
+                    })
+                } else {
+                    $mdDialog.show({
+                        controller: controller(widget, $scope.schemadetails),
+                        templateUrl: 'app/pages/dialogs/addWidget.html',
+                        parent: angular.element(document.body),
+                        targetEvent: ev,
+                        clickOutsideToClose: true,
+                        onComplete: setupSortable
+                    })
+                        .then(function (widget) {
                             if (widget._id) {
                                 $scope.saveWidget(widget);
                             } else {
                                 $scope.addWidget(widget);
                             }
-                        }, function() {
+                        }, function () {
                             console.log("dialog closed");
                         });
                 }
             };
-            $scope.addWidget = function(widget) {
+            $scope.addWidget = function (widget) {
                 $scope.$emit("appLoading", true);
-                Widget.addWidget(widget).then(function(data) {
+                Widget.addWidget(widget).then(function (data) {
                     if (data.data.success) {
                         $scope.getWidgets();
                         //emit apploading
@@ -71,12 +71,12 @@
                     } else {
                         $scope.$emit("errorReceived", data.data.message);
                     }
-                }, function(response) {
+                }, function (response) {
                     $scope.$emit("errorReceived", response.statusText);
                 });
             }
-            $scope.saveWidget = function(widget) {
-                Widget.saveWidget(widget).then(function(data) {
+            $scope.saveWidget = function (widget) {
+                Widget.saveWidget(widget).then(function (data) {
                     if (data.data.success) {
                         $scope.getWidgets();
                         //emit apploading
@@ -84,13 +84,13 @@
                     } else {
                         $scope.$emit("errorReceived", data.data.message);
                     }
-                }, function(response) {
+                }, function (response) {
                     $scope.$emit("errorReceived", response.statusText);
                 });
             }
-            $scope.deleteWidget = function(widgetID) {
+            $scope.deleteWidget = function (widgetID) {
                 if (widgetID) {
-                    Widget.deleteWidget(widgetID).then(function(data) {
+                    Widget.deleteWidget(widgetID).then(function (data) {
                         if (data.data.success) {
                             $scope.getWidgets();
                             //emit apploading
@@ -98,7 +98,7 @@
                         } else {
                             $scope.$emit("errorReceived", data.data.message);
                         }
-                    }, function(response) {
+                    }, function (response) {
                         $scope.$emit("errorReceived", response.statusText);
                     });
                 }
@@ -106,12 +106,12 @@
             $scope.getWidgets();
 
             function controller(widget, schemadetails) {
-                return function($scope, $mdDialog) {
+                return function ($scope, $mdDialog) {
                     $scope.schemadetails = schemadetails;
-                    $scope.cancel = function() {
+                    $scope.cancel = function () {
                         $mdDialog.cancel();
                     };
-                    $scope.answer = function() {
+                    $scope.answer = function () {
                         $mdDialog.hide($scope.widget);
                     };
                     if (widget) {
@@ -123,10 +123,17 @@
                             order: 0,
                             print: false,
                             limit: 10,
-                            query: []
+                            query: [],
+                            filters: {
+                                "claims": "{$match:{woffice:'5'}}"
+                                ,
+                                "users": "{}"
+                                ,
+                                "dependents": "{}"
+                            }
                         }
                     }
-                    $scope.hasColumn = function(key, columnName) {
+                    $scope.hasColumn = function (key, columnName) {
                         var queries = this.widget.query;
                         for (var i = 0; i < queries.length; i++) {
                             var context = queries[i].context;
@@ -137,7 +144,7 @@
                         }
                         return false;
                     }
-                    $scope.selectColumn = function(ev, key, columnName, type) {
+                    $scope.selectColumn = function (ev, key, columnName, type) {
                         console.log(key);
                         if (ev.currentTarget.attributes.checked) {
                             //remove from key
@@ -155,7 +162,7 @@
                             })
                         }
                     }
-                    $scope.getIndex = function(key, columnName) {
+                    $scope.getIndex = function (key, columnName) {
                         var queries = this.widget.query;
                         for (var i = 0; i < queries.length; i++) {
                             var context = queries[i].context;
@@ -174,10 +181,10 @@
                 element.find(".list-group").sortable({
                     placeholder: "ui-state-highlight",
                     containment: "parent",
-                    start: function(event, ui) {
+                    start: function (event, ui) {
                         oldIndex = ui.item.parent().children().index(ui.item.get(0));
                     },
-                    stop: function(event, ui) {
+                    stop: function (event, ui) {
                         var newIndex = ui.item.parent().children().index(ui.item.get(0));
                         if (newIndex != oldIndex) {
                             util.ArrayMove(scope.widget.query, oldIndex, newIndex);

@@ -120,7 +120,7 @@ router.get('/', function(req, res, next) {
 router.get('/schemadetails', function(req, res, next) {
     res.json({
         schemas: [{
-                "claims": util.omit(Claim.schema.paths, ["_id", "__v", "_dependentId"])
+                "claims": util.omit(Claim.schema.paths, ["__v", "_dependentId"])
             },
             {
                 'users': util.omit(User.schema.paths, ["_id", "__v", "password", "employeenumber"])

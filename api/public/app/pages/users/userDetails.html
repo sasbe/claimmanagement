@@ -3,7 +3,7 @@
         <md-toolbar md-theme="dark-blue" class="md-hue-2">
             <div class="md-toolbar-tools">
                 <h2 flex md-truncate>
-                    <strong>{{ userDetails.userData.username }}<span class="badge">{{ userDetails.userData.employeenumber }}</span></strong>
+                    <strong>{{ userDetails.userData.username }}<span class="badge">{{ userDetails.userData._id }}</span></strong>
                 </h2>
             </div>
         </md-toolbar>
@@ -73,6 +73,33 @@
                                     <md-input-container>
                                         <label class="md-required">Office location</label>
                                         <input ng-disabled="main.isAdmin && !userDetails.editMode" name="department" ng-model="userDetails.userData.woffice" required>
+                                        <div ng-messages="userform.department.$dirty && userform.department.$invalid ">
+                                            <span ng-message="userform.department.$error.required ">Office loaction is required.</span>
+                                        </div>
+                                    </md-input-container>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <md-input-container>
+                                        <label class="md-required">Bank name</label>
+                                        <input ng-disabled="main.isAdmin && !userDetails.editMode" name="bankname" ng-model="userDetails.userData.bankname" required>
+                                        <div ng-messages="userform.department.$dirty && userform.department.$invalid ">
+                                            <span ng-message="userform.department.$error.required ">Office loaction is required.</span>
+                                        </div>
+                                    </md-input-container>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <md-input-container>
+                                        <label class="md-required">Bank branch</label>
+                                        <input ng-disabled="main.isAdmin && !userDetails.editMode" name="bankbranch" ng-model="userDetails.userData.bankbranch" required>
+                                        <div ng-messages="userform.department.$dirty && userform.department.$invalid ">
+                                            <span ng-message="userform.department.$error.required ">Office loaction is required.</span>
+                                        </div>
+                                    </md-input-container>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <md-input-container>
+                                        <label class="md-required">Bank account number</label>
+                                        <input ng-disabled="main.isAdmin && !userDetails.editMode" name="bankaccountnumber" ng-model="userDetails.userData.bankacnumber">
                                         <div ng-messages="userform.department.$dirty && userform.department.$invalid ">
                                             <span ng-message="userform.department.$error.required ">Office loaction is required.</span>
                                         </div>

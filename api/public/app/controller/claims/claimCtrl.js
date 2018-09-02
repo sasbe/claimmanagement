@@ -7,9 +7,9 @@
             var controllerScope = this;
             controllerScope.claimData = {
                 claimdate: (new Date()).toISOString(),
-                claimamount: 0
+                claimamount: 0,
+                dependentId: 'SELF'
             };
-            $scope.selectedDependent = "SELF";
             controllerScope.disabledDependent = true;
             if (!$scope.$parent.main.isAdmin) {
                 controllerScope.disabledAutoComplete = true;
@@ -51,23 +51,24 @@
 
             controllerScope.selectedItemChange = function (item) {
                 if (item) {
-                    controllerScope.claimData.employeeno = item.employeenumber;
+                    controllerScope.claimData.employeeid = item._id;
                     controllerScope.empID = item._id;
                     controllerScope.disabledDependent = false;
                 }
                 else {
-                    controllerScope.claimData.employeeno = "";
+                    controllerScope.claimData.employeeid = "";
                     controllerScope.disabledDependent = true;
                     controllerScope.empID = "";
                 }
             }
             controllerScope.selectedDependentChange = function (item) {
                 if (item) {
-                    controllerScope.claimData._dependentId = item._id;
+                    controllerScope.claimData.dependentId = item._id;
                 }
-                else {
-                    controllerScope.claimData._dependentId = "SELF";
-                }
+            }
+            controllerScope.clearDependent = function(){
+                controllerScope.claimData.dependentId = 'SELF';
+                $scope.selectedDependent = 'SELF';
             }
         })
 

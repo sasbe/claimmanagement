@@ -63,7 +63,7 @@
                         var dependent = row[value.context];
                         if (dependent) {
                             dependent = dependent[0];
-                            if (dependent && dependent.length) {
+                            if (dependent) {
                                 val = dependent[value.name] ? dependent[value.name] : "";
                             } else {
                                 val = "";

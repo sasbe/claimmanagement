@@ -10,6 +10,28 @@ var util = (function util() {
                     }
                     return result;
                 }, {});
+            },
+            
+            throwError: function(res, type){
+                var error = ''
+                switch(type){
+                    case 'AccessDenied':
+                        error = "Oops! Access Denied"
+                        break;
+                    case 'RequireField':
+                        error = "Please fill all the required fields"
+                        break;
+                    case 'AdminError':
+                        error = "Server failure. Please contact the administrator"
+                        break;
+                    default: 
+                        error = type;
+                        break;
+                }
+                return res.json({
+                    success: false,
+                    message: error
+                });
             }
         }
     }

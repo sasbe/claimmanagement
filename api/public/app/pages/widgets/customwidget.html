@@ -16,12 +16,12 @@
                     <a ng-click="prevPage() ">« Prev</a>
                 </li>
 
-                <li ng-hide="records.length<20">
+                <li ng-hide="records.length<limit">
                     <a ng-click="nextPage()">Next »</a>
                 </li>
             </ul>
         </div>
-        <div class="sa-table">
+        <div class="sa-table table-layout">
             <div class="sa-table-header sa-table-row">
                 <div class="sa-table-header-cell sa-table-cell" ng-repeat="column in columns">{{column.displayName}}</div>
             </div>

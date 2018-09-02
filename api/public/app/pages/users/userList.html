@@ -49,10 +49,10 @@
                 </div>
             </form>
         </div>
-        <div style="overflow-x:auto ">
+        <div style="table-layout">
             <div class="sa-table">
                 <div class="sa-table-header sa-table-row">
-                    <div class="sa-table-header-cell sa-table-cell" order=" 'employeenumber' " sort="sort " custom-sort>Employee number
+                    <div class="sa-table-header-cell sa-table-cell" order=" '_id' " sort="sort " custom-sort>Employee number
                     </div>
                     </th>
                     <div class="sa-table-header-cell sa-table-cell" order=" 'username' " sort="sort " custom-sort>Employee name
@@ -70,7 +70,7 @@
                 <div class="sa-table-body">
                     <div class="sa-table-row" ng-repeat="x in users.users | orderBy:sort.sortingOrder:sort.reverse | filter: users.filter ">
                         <div class="sa-table-cell" data-label="User no: ">
-                            <a ng-href="userDetails/{{x._id}} ">{{x.employeenumber}}</a>
+                            <a ng-href="userDetails/{{x._id}} ">{{x._id}}</a>
                         </div>
                         <div class="sa-table-cell" data-label="User name: ">{{ x.username }}</div>
                         <div class="sa-table-cell" data-label="Department: ">{{x.designation}}</div>

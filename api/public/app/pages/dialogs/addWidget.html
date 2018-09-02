@@ -69,12 +69,22 @@
                     <div>
                         <ul class="list-group">
                             <li class="list-group-item" ng-repeat="column in widget.query">
-                                <span class="label label-primary">{{column.name}}</span><span class="badge">{{column.context}}</span>
+                                <span class="label label-primary">{{column.name}}</span>
+                                <span class="badge">{{column.context}}</span>
                                 <md-input-container>
                                     <input name="displayName" ng-model="column.displayName" required>
                                 </md-input-container>
                             </li>
                         </ul>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    Filters:
+                    <div ng-repeat="(key,value) in widget.filters">
+                        <md-input-container class="md-block">
+                            <label>Filter for {{key}}</label>
+                            <textarea ng-model="value" rows="3" md-select-on-focus></textarea>
+                        </md-input-container>
                     </div>
                 </div>
             </form>

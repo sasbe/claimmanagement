@@ -7,19 +7,19 @@ var Dependent = require('../models/dependents');
 var jwt = require('jsonwebtoken');
 var SECRET = "sampleapplication";
 var Claim = require('../models/claim');
-var Counter = require('../models/counters');
-
+// var Counter = require('../models/counters');
+var Utils = require("../utils/commonutil").getInstance();
 var async = require('async');
 var officegen = require('officegen');
 
 var fs = require('fs');
 var path = require('path');
 
-router.use(function(req, res, next) {
+router.use(function (req, res, next) {
     try {
         var token = req.body.token || req.body.query || req.headers['x-access-token'];
         if (token) {
-            jwt.verify(token, SECRET, function(err, decoded) {
+            jwt.verify(token, SECRET, function (err, decoded) {
                 if (err) {
                     res.redirect('/');
                 } else {
@@ -35,59 +35,68 @@ router.use(function(req, res, next) {
     }
 });
 
-router.get("/individual/:claimid", function(req, res) {
+router.get("/individual/:claimid", function (req, res) {
     if (req.params.claimid) {
-        Claim.findById(req.params.claimid, function(err, claim) {
+        Claim.aggregate([{
+            $match: {
+                _id: req.params.claimid
+            }
+        },
+        {
+            $lookup: {
+                from: 'dependents',
+                localField: 'dependentId',
+                foreignField: '_id',
+                as: 'dependentDetails',
+            }
+        },
+        {
+            $lookup: {
+                from: 'users',
+                localField: 'employeeid',
+                foreignField: '_id',
+                as: 'userDetails',
+            }
+        }
+        ], function (err, claimArray) {
+            if (!claimArray.length) {
+                return Utils.throwError(res, 'Oops! It seems the claim id is wrong.')
+            }
+            var claim = claimArray[0];
             if (err) {
-                return res.json({
-                    success: false,
-                    message: "Oops! You are trying something that is not supported"
-                });
+                return Utils.throwError(res, "AccessDenied");
             } else {
-                if (req.decoded.employeenumber === claim.empno || req.decoded.role === "super") {
+                if (req.decoded.employeenumber === claim.employeeid || req.decoded.role === "super") {
                     var access = "R";
                     if (req.decoded && req.decoded.role === "super") {
                         access = "W";
                     }
-                    Dependent.findById(claim._dependentId, function(err, dependent) {
-                        if (err) {
-                            return res.json({
-                                success: false,
-                                message: "Oops! You are trying something that is not supported"
-                            });
-                        } else if (dependent) {
-                            claim.dependentName = dependent.dependentName;
-                            return res.json({
-                                success: true,
-                                access: access,
-                                claim: claim
-                            })
-                        } else {
-                            claim.dependentName = claim.claimname;
-                            return res.json({
-                                success: true,
-                                access: access,
-                                claim: claim
-                            })
-                        }
-                    })
-                } else {
+                    var dependent = claim.dependentDetails;
+                    if (dependent.length) {
+                        claim.dependentName = dependent[0].dependentName;
+                    } else {
+                        claim.dependentName = "SELF";
+                    }
+                    var user = claim.userDetails;
+                    if (user.length) {
+                        claim.contactnum = user[0].phone;
+                    }
                     return res.json({
-                        success: false,
-                        message: "Oops! You are trying something that is not supported"
+                        success: true,
+                        access: access,
+                        claim: claim
                     });
+                } else {
+                    return Utils.throwError(res, "AccessDenied");
                 }
             }
         });
     } else {
-        return res.json({
-            success: false,
-            message: "Oops! It seems the claim id is wrong."
-        })
+        return Utils.throwError(res, "Oops! It seems the claim id is wrong.");
     }
 })
 
-router.get('/claimList', function(req, res, next) {
+router.get('/claimList', function (req, res, next) {
     // forming query criteria
     if (req.decoded) {
         var filter = {};
@@ -125,8 +134,8 @@ router.get('/claimList', function(req, res, next) {
         }
         console.log(JSON.stringify(criteria) + req.query.fromdate + req.query.todate);
         Claim.find(
-            criteria, "empno claimno claimdate claimname claimamount dischargedate reimbursedamount", filter,
-            function(err, claims) {
+            criteria, "employeeid _id claimdate claimname claimamount dischargedate reimbursedamount", filter,
+            function (err, claims) {
                 if (err) {
                     return res.json({
                         success: false,
@@ -141,36 +150,26 @@ router.get('/claimList', function(req, res, next) {
                 }
             })
     } else {
-        return res.json({
-            success: false,
-            message: "Oops! You are trying something that is not supported"
-        });
+        return Utils.throwError(res, "AccessDenied");
     }
 
 });
 
-router.put('/updateClaim/:claimId', function(req, res) {
+router.put('/updateClaim/:claimId', function (req, res) {
     try {
-        Claim.findById(req.params.claimId, function(err, claim) {
+        Claim.findById(req.params.claimId, function (err, claim) {
             if (err) {
-                return res.json({
-                    success: false,
-                    message: "No such claim exist"
-                });
+                return Utils.throwError(res, "No such claim exist");
             } else {
-                console.log(claim);
-                if (claim.empno === req.decoded.employeenumber || req.decoded.role === "super") {
+                if (claim.employeeid === req.decoded.employeenumber || req.decoded.role === "super") {
                     claim.dischargedate = req.body.dischargedate;
                     claim.reimbursedamount = req.body.reimbursedamount;
                     //backward compatibility
-                    claim.dependentName = claim.dependentName ? claim.dependentName : "SELF";
+                    // claim.dependentName = claim.dependentName ? claim.dependentName : "SELF";
                     // claim.claimno = req.body.claimno;
-                    claim.save(function(err) {
+                    claim.save(function (err) {
                         if (err) {
-                            return res.json({
-                                success: false,
-                                message: "Server failure. Please contact the administrator"
-                            });
+                            return Utils.throwError(res, "AdminError");
                         } else {
                             return res.json({
                                 success: true,
@@ -179,10 +178,7 @@ router.put('/updateClaim/:claimId', function(req, res) {
                         }
                     })
                 } else {
-                    return res.json({
-                        success: false,
-                        message: "Access denied"
-                    });
+                    return Utils.throwError(res, "AccessDenied");
                 }
             }
         });
@@ -191,131 +187,168 @@ router.put('/updateClaim/:claimId', function(req, res) {
     }
 
 });
-router.delete("/deleteClaim/:id", function(req, res) {
+router.delete("/deleteClaim/:id", function (req, res) {
     if (req.decoded && req.decoded.role === "super") {
         var id = req.params.id;
         if (id != undefined) {
-            Claim.findByIdAndRemove(id, function(err) {
+            Claim.findByIdAndRemove(id, function (err) {
                 if (!err) {
                     return res.json({
                         success: true,
                         message: "Claim is deleted"
                     });
                 } else {
-                    return res.json({
-                        success: false,
-                        message: "Oops! Could not delete the user. Contact the administrator."
-                    });
+                    return Utils.throwError(res, "Oops! Could not delete the user. Contact the administrator.");
                 }
             })
         } else {
-
-            return res.json({
-                success: false,
-                message: "Oops! You are trying something that is not supported"
-            });
-
+            return Utils.throwError(res, "AccessDenied");
         }
     } else {
-        return res.json({
-            success: false,
-            message: "Oops! You are trying something that is not supported"
-        });
+        return Utils.throwError(res, "AccessDenied");
     }
 });
 
 //add claim
-router.post('/addClaim', function(req, res) {
+router.post('/addClaim', function (req, res) {
     try {
         if (req.decoded && req.decoded.role === "super") {
-            var employeeno = req.body.employeeno,
-                claimname = req.body.claimname,
+            var employeeid = req.body.employeeid,
                 claimdate = req.body.claimdate,
-                claimoffice = req.body.claimoffice,
                 claimamount = req.body.claimamount,
-                contactnum = req.body.contactnum,
-                dependentId = req.body._dependentId;
-            console.log(employeeno + " " + claimname + " " + claimdate + " " + claimoffice + " " + claimamount + " " + contactnum);
-            if (employeeno == null || employeeno == '' || claimdate == null || claimdate == '' ||
-                claimoffice == null || claimoffice == '' || claimamount == null || claimamount === '' || contactnum == null ||
-                contactnum == '' || claimname == null || claimname == '' || dependentId == null) {
-                return res.json({ success: false, message: "Ensure required fields were provided" })
+                dependentId = req.body.dependentId;
+            if (employeeid == null || employeeid == '' || claimdate == null || claimdate == ''
+                || claimamount == null || claimamount === '' || dependentId == null) {
+                return Utils.throwError(res, "RequireField");
             }
-            Counter.findByIdAndUpdate({ _id: req.body.sequenceName }, { $inc: { sequence_value: 1 } }, { new: true, upsert: true, setDefaultsOnInsert: true },
-                function(error, counter) {
-                    console.log(counter);
-                    if (error) {
-                        return res.json({
-                            success: false,
-                            message: error
-                        });
+            //chain operation
+            // get counter of claim for the year of claim Date
+            // create calimno as +1 of length
+            // claim name should be either dependent name or 'SELF'
+            if (dependentId == 'SELF') {
+                User.findById(employeeid, function (err, user) {
+                    if (err) {
+                        return Utils.throwError(res, "AdminError")
+                    } else if (user._id != employeeid) {
+                        return Utils.throwError(res, 'This claim can not be created due to technical reason. Please consult with administrator');
                     } else {
-                        User.findOne({
-                            employeenumber: employeeno
-                        }, 'username', function(userErr, claimUser) {
-                            if (userErr) {
-                                return res.json({
-                                    success: false,
-                                    message: "Oops! You are trying something that is not supported"
-                                });
-                            } else {
-                                var newClaims = new Claim();
-                                newClaims.claimname = claimname;
-                                newClaims.claimno = counter.sequence_value;
-                                newClaims.claimdate = claimdate;
-                                newClaims.claimoffice = claimoffice;
-                                newClaims.claimamount = claimamount;
-                                newClaims.contactnum = contactnum;
-                                newClaims.empno = employeeno;
-                                newClaims._dependentId = mongoose.Types.ObjectId(dependentId)
-                                newClaims.save(function(saveErr) {
-                                    if (saveErr) {
-                                        return res.json({
-                                            success: false,
-                                            message: saveErr
-                                        });
-                                    } else {
-                                        return res.json({
-                                            success: true,
-                                            message: "Claim is created"
-                                        });
-                                    }
-                                });
+                        var year = claimdate.split("-")[0];
+                        var firstDay = year + "-01-01T00:00:00Z";
+                        var lastDay = year + "-12-31T00:00:00Z"
+                        Claim.count({
+                            "claimdate": {
+                                "$gte": new Date(firstDay),
+                                "$lte": new Date(lastDay)
                             }
-                        });
+                        },
+                            function (err, count) {
+                                if (err) {
+                                    return Utils.throwError(res, 'AdminError');
+                                } else {
+                                    var claimno = year + "_" + (count + 1);
+                                    var newClaims = new Claim();
+                                    newClaims._id = claimno;
+                                    newClaims.claimdate = claimdate;
+                                    newClaims.claimoffice = user.woffice;
+                                    newClaims.claimamount = claimamount;
+                                    newClaims.employeeid = employeeid;
+                                    newClaims.dependentId = dependentId;
+                                    newClaims.save(function (saveErr) {
+                                        if (saveErr) {
+                                            return res.json({
+                                                success: false,
+                                                message: saveErr
+                                            });
+                                        } else {
+                                            return res.json({
+                                                success: true,
+                                                message: "Claim is created"
+                                            });
+                                        }
+                                    });
+                                }
+                            })
                     }
                 })
-
+            }
+            else {
+                Dependent.aggregate([{
+                    $match: {
+                        _id: dependentId
+                    }
+                },
+                {
+                    $lookup: {
+                        from: "users",
+                        localField: 'employeeid',
+                        foreignField: '_id',
+                        as: 'user'
+                    }
+                }
+                ], function (err, result) {
+                    if (result.length) {
+                        var user = result[0].user[0];
+                        if (err) {
+                            return Utils.throwError(res, "AdminError");
+                        } else if (user._id != employeeid) {
+                            return Utils.throwError(res, 'This claim can not be created due to technical reason. Please consult with administrator');
+                        } else {
+                            var year = claimdate.split("-")[0];
+                            var firstDay = year + "-01-01T00:00:00Z";
+                            var lastDay = year + "-12-31T00:00:00Z"
+                            Claim.count({
+                                "claimdate": {
+                                    "$gte": new Date(firstDay),
+                                    "$lte": new Date(lastDay)
+                                }
+                            }, function (err, count) {
+                                if (err) {
+                                    return Utils.throwError(res, 'AdminError');
+                                } else {
+                                    var claimno = year + "_" + (count + 1);
+                                    var newClaims = new Claim();
+                                    newClaims._id = claimno;
+                                    newClaims.claimdate = claimdate;
+                                    newClaims.claimoffice = user.woffice;
+                                    newClaims.claimamount = claimamount;
+                                    newClaims.employeeid = employeeid;
+                                    newClaims.dependentId = dependentId;
+                                    newClaims.save(function (saveErr) {
+                                        if (saveErr) {
+                                            return res.json({
+                                                success: false,
+                                                message: saveErr
+                                            });
+                                        } else {
+                                            return res.json({
+                                                success: true,
+                                                message: "Claim is created"
+                                            });
+                                        }
+                                    });
+                                }
+                            })
+                        }
+                    } else {
+                        return Utils.throwError(res, "AdminError");
+                    }
+                })
+            }
         } else {
-            return res.json({
-                success: false,
-                message: "Oops! You are trying something that is not supported"
-            });
+            return Utils.throwError(res, "AccessDenied");
         }
     } catch (err) {
-        console.log(err);
-        next();
+        return Utils.throwError(res, "AdminError");
     }
-
-    function getNextSequenceValue(sequenceName) {
-        var sequenceDocument = Counters.findAndModify({
-            query: { _id: sequenceName },
-            update: { $inc: { sequence_value: 1 } },
-            new: true
-        });
-
-        return sequenceDocument.sequence_value;
-    }
-
 });
 
-router.post('/print', function(req, res, next) {
+router.post('/print', function (req, res, next) {
     var docx = officegen({
         type: 'docx',
         orientation: 'landscape'
 
     });
-    docx.on('error', function(err) {
+    docx.on('error', function (err) {
         return res.json({ success: false, message: "File can not be downloaded, please contact the administrator" });
     });
 
@@ -370,7 +403,7 @@ router.post('/print', function(req, res, next) {
     var datum = req.body;
 
     if (datum) {
-        for (var i = 0, j = 1, length = datum.length; i < length; i++, j++) {
+        for (var i = 0, j = 1, length = datum.length; i < length; i++ , j++) {
             var row = datum[i];
             var rowArray = [
                 row.claimno,
@@ -399,20 +432,20 @@ router.post('/print', function(req, res, next) {
     var pObj = docx.createTable(table, tableStyle);
     var out = fs.createWriteStream('public/downloads/out.docx', { flags: 'w' });
 
-    out.on('error', function(err) {
+    out.on('error', function (err) {
         return res.json({ success: false, message: "File can not be downloaded, please contact the administrator" });
     });
 
     async.parallel([
-        function(done) {
-            out.on('close', function() {
+        function (done) {
+            out.on('close', function () {
                 console.log('Finish to create a DOCX file.');
                 res.json({ success: true, url: "downloads/out.docx" });
             });
             docx.generate(out);
         }
 
-    ], function(err) {
+    ], function (err) {
         if (err) {
             return res.json({ success: false, message: "File can not be downloaded, please contact the administrator" });
         } // Endif.

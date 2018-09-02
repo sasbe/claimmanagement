@@ -73,7 +73,7 @@
                         return NUMBER_REGEXP.test(viewValue);
                     };
                 },
-                template: '<input type="text" class="form-control">'
+                template: '<input type="text" class="form-control nepali-money">'
             }
 
         })

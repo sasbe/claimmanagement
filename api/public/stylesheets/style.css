@@ -50,7 +50,8 @@ fieldset[disabled] .form-control,
 }
 
 .errorwindow {
-    position: fixed;
+    position: absolute;
+    z-index: 3;
     top: 0;
     width: 50%;
     left: 25%;
@@ -159,8 +160,28 @@ table tr:nth-child(even) {
 .datepicker {
     position: relative;
     padding: 0;
+    outline: none;
 }
 
+.form-control.ndp-nepali-calendar:focus, .form-control.nepali-money:focus{
+    border-color: rgb(63,81,181);
+    border-width:0 0 2px;
+}
+.form-control.ndp-nepali-calendar,.form-control.nepali-money{
+    outline: none;
+    display: block;
+    background: none;
+    padding: 2px 2px 1px;
+    border-width: 0 0 1px;
+    line-height: 26px;
+    height: 30px;
+    box-shadow: none;
+    -ms-flex-preferred-size: 26px;
+    border-radius: 0;
+    border-style: solid;
+    width: 100%;
+    box-sizing: border-box;
+}
 .datepicker .ndp-click-trigger {
     position: absolute;
     right: 0;
@@ -346,7 +367,10 @@ table tr:nth-child(even) {
 
 
 /* custom table*/
-
+.table-layout {
+    overflow-x:auto;
+    min-height:  400px;
+}
 .sa-table,
 .shadow {
     background: #FFF;

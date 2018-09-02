@@ -9,13 +9,14 @@
         <form name="addClaimForm" ng-hide="createClaim.appLoading" novalidate ng-submit="createClaim.addClaim()">
             <div class="row">
                 <div class="form-group col-md-6">
-                    <md-autocomplete ng-disabled="createClaim.disabledAutoComplete" md-menu-class="autocomplete-custom" required md-input-name="employeeno" md-selected-item="selectedItem" md-floating-label="Employee number" md-search-text="searchText" ng-pattern="/^[0-9]*$/"
-                        md-items="item in createClaim.getMatches(searchText)" md-item-text="item.employeenumber+''" md-selected-item-change="createClaim.selectedItemChange(item)">
+                    <md-autocomplete md-autoselect=true ng-disabled="createClaim.disabledAutoComplete" md-menu-class="autocomplete-custom" required md-input-name="employeeno" md-selected-item="selectedItem" 
+                     md-floating-label="Employee number" md-search-text="searchText" ng-pattern="/^[0-9]*$/"
+                     md-search-text-change="createClaim.clearDependent()" md-items="item in createClaim.getMatches(searchText)" md-item-text="item._id" md-selected-item-change="createClaim.selectedItemChange(item)">
                         <md-item-template>
                             <span class="item-metadata">
                                 <span>
                                     Employee Number:
-                                    <span md-highlight-text="searchText" md-highlight-flags="^i">{{item.employeenumber}}</span>
+                                    <span md-highlight-text="searchText" md-highlight-flags="^i">{{item._id}}</span>
                             </span>
                             <span>
                                     Name:
@@ -33,8 +34,9 @@
                     </md-autocomplete>
                 </div>
                 <div class="form-group col-md-6">
-                    <md-autocomplete ng-disabled="createClaim.disabledDependent" md-menu-class="autocomplete-custom" required md-input-name="depenedent" md-selected-item="selectedDependent" md-floating-label="Dependent name" md-search-text="searchDependent" md-items="item in createClaim.getMatchedDependents(searchDependent)"
-                        md-item-text="item.dependentName+''" md-selected-item-change="createClaim.selectedDependentChange(item)">
+                    <md-autocomplete ng-disabled="createClaim.disabledDependent" md-menu-class="autocomplete-custom" required md-input-name="depenedent" md-selected-item="selectedDependent" 
+                    md-floating-label="Dependent name" md-search-text="searchDependent" md-items="item in createClaim.getMatchedDependents(searchDependent)"
+                    md-item-text="item.dependentName+''" md-selected-item-change="createClaim.selectedDependentChange(item)">
                         <md-item-template>
                             <span class="item-metadata">
                                 <span>
@@ -58,40 +60,6 @@
                 </div>
 
             </div>
-
-            <div class="row">
-                <div class="form-group col-md-6">
-
-                    <md-input-container>
-                        <label class="md-required">Claim name</label>
-                        <input name="claimname" ng-model="createClaim.claimData.claimname" required>
-                        <div ng-messages="addClaimForm.claimname.$error">
-                            <div ng-message="required">This is required!</div>
-                        </div>
-                    </md-input-container>
-                </div>
-                <div class="form-group col-md-6">
-                    <md-input-container>
-                        <label class="md-required">Claim office</label>
-                        <input name="claimoffice" ng-model="createClaim.claimData.claimoffice" required>
-                        <div ng-messages="addClaimForm.claimoffice.$error">
-                            <div ng-message="required">This is required!</div>
-                        </div>
-                    </md-input-container>
-                </div>
-            </div>
-            <div class="row">
-                <div class="form-group col-md-6">
-                    <md-input-container>
-                        <label class="md-required">Contact number</label>
-                        <input name="contactnum" ng-model="createClaim.claimData.contactnum" number required>
-                        <div ng-messages="addClaimForm.contactnum.$error">
-                            <div ng-message="required">This is required!</div>
-                            <div ng-message="number">Phone number is invalid</div>
-                        </div>
-                    </md-input-container>
-                </div>
-            </div>
             <div class="row">
                 <div class="form-group col-md-6">
                     <label for="claimdate">Claim Date:</label>
@@ -111,12 +79,7 @@
             </div>
 
 
-            <md-button type="submit" class="md-primary md-raised" ng-disabled=" addClaimForm.contactnum.$invalid ||
-  addClaimForm.claimdate.$invalid|| addClaimForm.claimname.$invalid || 
-   addClaimForm.claimoffice.$invalid ||  addClaimForm.claimno.$invalid || 
-   addClaimForm.claimamount.$invalid || addClaimForm.employeeno.$invalid ||
-addClaimForm.employeenumber.$error.number|| addClaimForm.dependentName.$invalid ||
-   addClaimForm.claimamount.$error.money || addClaimForm.emailid.$error.date || !createClaim.claimData.employeeno">Add Claim</md-button>
+            <md-button type="submit" class="md-primary md-raised" ng-disabled=" addClaimForm.$invalid">Add Claim</md-button>
 
         </form>
     </md-content>

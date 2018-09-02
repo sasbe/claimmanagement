@@ -65,7 +65,7 @@
                     </div>
                 </form>
             </div>
-            <div style="overflow-x:auto ">
+            <div class="table-layout">
                 <div class="sa-table">
                     <div class="sa-table-header sa-table-row">
                         <div class="sa-table-header-cell sa-table-cell" order=" 'claimno' " sort="sort " custom-sort>
@@ -95,11 +95,13 @@
                         <div class="sa-table-row" ng-repeat="x in claims.claims | orderBy:sort.sortingOrder:sort.reverse | filter: claims.filter ">
                             <div class="sa-table-cell" data-label="Claim no: ">
                                 <a ng-href="claimDetails/{{x._id}} ">
-                                        {{x.claimno}}
-                                    </a>
+                                    {{x._id}}
+                                </a>
                             </div>
                             <div class="sa-table-cell" data-label="Employee no: ">
-                                {{ x.empno }}
+                                <a ng-href="userDetails/{{x.employeeid}} ">
+                                    {{x.employeeid}}
+                                </a>
                             </div>
                             <div class="sa-table-cell" data-label="Claim date: ">
                                 <nepalidatereadonly date="{{x.claimdate}} ">

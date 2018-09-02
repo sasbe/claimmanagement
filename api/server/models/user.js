@@ -2,10 +2,10 @@ var mongoose = require('mongoose');
 var bcrypt = require('bcrypt-nodejs');
 
 var userSchema = mongoose.Schema({
+    _id: { type: String, required: true, unique: true },
     username: { type: String, required: true, uppercase: true },
     emailid: { type: String, unique: true },
     password: { type: String, required: true },
-    employeenumber: { type: Number, required: true, unique: true },
     designation: { type: String, required: true, uppercase: true },
     level: { type: Number, required: true },
     woffice: { type: String, required: true, uppercase: true },
@@ -13,7 +13,7 @@ var userSchema = mongoose.Schema({
     phone: { type: String },
     bankname: { type: String },
     bankacnumber: { type: String },
-    bankbranch: {type: String}
+    bankbranch: { type: String }
 });
 
 

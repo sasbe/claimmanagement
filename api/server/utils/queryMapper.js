@@ -17,9 +17,9 @@ QueryMapper.buildQuery = function(query, limit, skip) {
         queries.push({
             $lookup: {
                 from: 'users',
-                localField: 'empno',
-                foreignField: 'employeenumber',
-                as: 'user'
+                localField: 'employeeid',
+                foreignField: '_id',
+                as: 'users'
             }
         });
     }
@@ -27,7 +27,7 @@ QueryMapper.buildQuery = function(query, limit, skip) {
         queries.push({
             $lookup: {
                 from: 'dependents',
-                localField: '_dependentId',
+                localField: 'dependentId',
                 foreignField: '_id',
                 as: 'dependents'
             }

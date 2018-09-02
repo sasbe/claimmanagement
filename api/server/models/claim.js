@@ -1,17 +1,15 @@
 var mongoose = require('mongoose');
 
 var claimSchema = mongoose.Schema({
-    claimno: { type: Number, required: true },
+    _id: { type: String, required: true, unique: true},
     claimdate: { type: Date, required: true },
     claimoffice: { type: String, required: true },
-    claimname: { type: String, required: true },
     claimamount: { type: Number, required: true },
-    contactnum: { type: Number, required: true },
     dischargedate: { type: Date },
     reimbursedamount: { type: Number },
     remarks: { type: String },
-    empno: { type: Number, required: true, lowercase: true },
-    _dependentId: { type: mongoose.Schema.Types.ObjectId, required: true },
+    employeeid: { type: String, required: true},
+    dependentId: { type: String, required: true, default: "SELF" },
     completed: { type: Boolean }
 });
 
