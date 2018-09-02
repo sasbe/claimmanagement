@@ -10,13 +10,7 @@ const schema = {
         'EMPNO': {
             prop: 'employeeid',
             required: true,
-            parse(value) {
-                const number = Number(value)
-                if (!number) {
-                    throw new Error('invalid')
-                }
-                return number
-            }
+            type: String
         },
         'DEPENDENT NAME': {
             prop: 'dependentName',
@@ -28,9 +22,9 @@ const schema = {
             required: true,
             type: String
         },
-        'AGE': {
-            prop: 'age',
-            type: Number
+        'Date Of Birth': {
+            prop: 'dob',
+            type: String
         }
     }
     // connect to MongoDB
@@ -39,20 +33,28 @@ mongoose.connect('mongodb://127.0.0.1/claim')
     .then(() => {
         console.log('connection succesful');
         console.log('Importing Document');
-        User.find({}, "employeenumber", function(error, users) {
+        User.find({}, "_id", function(error, users) {
             readXlsxFile(fs.createReadStream("D:\\data\\Dependentlist\\dl1.xlsx"), { schema, sheet: 2 }).then(({ rows, errors }) => {
                 if (errors.length > 0) {
                     console.log(errors);
                     return;
                 }
                 var data = [];
+                var dependentCounts = {};
                 var errorData = [];
                 rows.forEach(element => {
                     var foundEmp = users.find(function(user) {
-                        return user.employeenumber == element.employeeid;
+                        return user._id == element.employeeid;
                     })
                     if (foundEmp) {
-                        element.employeeid = mongoose.Types.ObjectId(foundEmp.id);
+                        element.employeeid = foundEmp.id;
+                        if(dependentCounts[element.employeeid]) {
+                            dependentCounts[element.employeeid] += dependentCounts[element.employeeid];
+                           element._id = element.employeeid + "__" + dependentCounts[element.employeeid];
+                        } else{
+                            element._id = element.employeeid + "__" + 1;
+                            dependentCounts[element.employeeid] = 1;
+                        }
                         data.push(element);
                     } else {
                         errorData.push(element);

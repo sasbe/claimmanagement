@@ -7,7 +7,7 @@ var userSchema = mongoose.Schema({
     emailid: { type: String, unique: true },
     password: { type: String, required: true },
     designation: { type: String, required: true, uppercase: true },
-    level: { type: Number, required: true },
+    level: { type: String, required: true },
     woffice: { type: String, required: true, uppercase: true },
     role: { type: String, required: true, uppercase: true },
     phone: { type: String },

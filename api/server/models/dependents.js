@@ -6,7 +6,7 @@ var dependentSchema = mongoose.Schema({
     employeeid: { type: String, required: true },
     dependentName: { type: String, required: true },
     relationshipType: { type: String, required: true },
-    age: { type: Number }
+    dob: { type: String }
 });
 
 
