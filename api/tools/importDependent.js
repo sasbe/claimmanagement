@@ -49,7 +49,7 @@ mongoose.connect('mongodb://127.0.0.1/claim')
                     if (foundEmp) {
                         element.employeeid = foundEmp.id;
                         if(dependentCounts[element.employeeid]) {
-                            dependentCounts[element.employeeid] += dependentCounts[element.employeeid];
+                            dependentCounts[element.employeeid] = dependentCounts[element.employeeid] +  1;
                            element._id = element.employeeid + "__" + dependentCounts[element.employeeid];
                         } else{
                             element._id = element.employeeid + "__" + 1;

@@ -406,8 +406,8 @@ router.post('/print', function (req, res, next) {
         for (var i = 0, j = 1, length = datum.length; i < length; i++ , j++) {
             var row = datum[i];
             var rowArray = [
-                row.claimno,
-                row.empno,
+                row._id,
+                row.employeeid,
                 row.claimname,
                 row.claimdate,
                 row.claimoffice,

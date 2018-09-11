@@ -48,7 +48,7 @@
                     } else {
                         $scope.$emit("errorReceived", reponse.data.message);
                     }
-                }, function() {
+                }, function(response) {
                     $scope.$emit("errorReceived", response.statusText);
                 });
             }
