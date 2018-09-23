@@ -111,7 +111,7 @@ router.get('/claimList', function (req, res, next) {
         if (req.decoded.role === "single") {
             criteria.empno = parseInt(req.decoded.employeenumber);
         } else if (req.query.empno && req.query.empno != "undefined") {
-            criteria.empno = parseInt(req.query.empno);
+            criteria.employeeid = req.query.empno;
         }
         if (req.query.claimno && req.query.claimno != "undefined") {
             criteria.claimno = req.query.claimno;

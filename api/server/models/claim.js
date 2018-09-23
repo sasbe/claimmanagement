@@ -10,7 +10,10 @@ var claimSchema = mongoose.Schema({
     remarks: { type: String },
     employeeid: { type: String, required: true},
     dependentId: { type: String, required: true, default: "SELF" },
-    completed: { type: Boolean }
+    completed: { type: Boolean },
+    hospitalName: { type: String},
+    admissionDate: { type:Date}
+
 });
 
 
