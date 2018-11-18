@@ -409,6 +409,10 @@ table tr:nth-child(even) {
     height: inherit;
 }
 
+
+
+ 
+
 .sa-table-body .sa-table-row:nth-child(odd) {
     background-color: rgba(0, 0, 0, 0.02);
 }
@@ -464,6 +468,8 @@ md-dialog.full-screen {
     }
     pre{
         border: none;
+        white-space:normal;
+        word-wrap: break-word;
     }
 }
 

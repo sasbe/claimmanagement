@@ -15,28 +15,23 @@
                     </div>
                 </div>
                 <div class="ntc-subject text-center">
-                    बिषय: डिस्चार्ज भौचर सहि गरि पठाइएको छ |
+                    बिषय: {{title}}
                 </div>
 
                 <div class="ntc-description">
                     <pre>
-श्री प्रभू ईन्स्योरेन्स लिमि६े८
-केन्द्रीय कार्यालय, तिनकूने का७मा०८ौं ।
-
-प्रस्तूत विषयमा यस कम्पनीका निम्न लिखित कर्मचारीहरुको तहांबा६ प्राप्त औषधी उपचार ८िस्चार्ज भौचर सही ५ाप गरी यसै पत्र साथ 
-प७ाइएको व्यहोरा अनूरोध गरिन्५ । 
-सो  प्राप्त भएप५ि दावी रकम यथासि३्र उपलब्ध गराई दिन’ह’न अन’रोध गरिन्५ ।
+{{body}}
                                 
                                     
                         </pre>
                 </div>
             </div>
         </md-toolbar>
-        <md-toolbar md-theme="dark-purple" class="md-hue-2 hidden-print">
+        <md-toolbar  class="md-hue-2 hidden-print">
             <div class="row md-toolbar-tools">
                 <h2 class="col-md-6">Claims that has changed today</h2>
                 <div class="col-md-6 text-right">
-                    <i class="fa fa-print" aria-hidden="true" ng-click="claims.print()"></i>
+                    <i class="fa fa-print" aria-hidden="true" ng-click="claims.print($event)"></i>
                 </div>
             </div>
         </md-toolbar>
