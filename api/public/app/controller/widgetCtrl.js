@@ -125,12 +125,44 @@
                             limit: 10,
                             query: [],
                             filters: {
-                                "claims": "{$match:{woffice:'5'}}"
-                                ,
-                                "users": "{}"
-                                ,
-                                "dependents": "{}"
-                            }
+                                "claims": 
+                                {
+                                    '$and':
+                                        [
+                                            { '$and': [{ '_id': { '$eq': "4996" } }] },
+                                            { '$and': [{ 'influencer.aboutMe.minPrice': { '$gte': 0 } }] },
+                                            {
+                                                '$and':
+                                                    [
+                                                        {
+                                                            '$or':
+                                                                [
+                                                                    {
+                                                                        '$and': [
+                                                                            { 'influencer.followed_by': { '$gte': 0 } }
+                                                                        ]
+                                                                    },
+
+                                                                    {
+                                                                        '$and': [
+                                                                            {
+                                                                                'influencer.youTubeSubscribercount': {
+                                                                                    '$gte':
+                                                                                        0
+                                                                                }
+                                                                            }
+                                                                        ]
+                                                                    }
+                                                                ]
+                                                        }
+                                                    ]
+                                            }
+                                        ]
+                                }
+                            },
+                            "users": "{}"
+                            ,
+                            "dependents": "{}"
                         }
                     }
                     $scope.hasColumn = function (key, columnName) {
@@ -143,6 +175,13 @@
                             }
                         }
                         return false;
+                    }
+
+                    $scope.querySegregation = function (key, columnName) {
+
+                    }
+                    $scope.addFilterCondition = function (tableName) {
+
                     }
                     $scope.selectColumn = function (ev, key, columnName, type) {
                         console.log(key);

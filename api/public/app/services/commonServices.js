@@ -1,9 +1,9 @@
-(function() {
+(function () {
     'use strict';
 
     angular
         .module('commonServices', [])
-        .factory('Query', function() {
+        .factory('Query', function () {
             function QueryObject() {
                 this.skip = 0;
                 this.limit = 10;
@@ -13,7 +13,7 @@
                 this.empno = null;
                 this.calimno = null;
             }
-            QueryObject.prototype.formQueryString = function() {
+            QueryObject.prototype.formQueryString = function () {
                 var querystring = "";
                 for (var name in this) {
                     if (Object.prototype.hasOwnProperty.call(this, name)) {
@@ -28,21 +28,21 @@
                 }
                 return querystring;
             }
-            QueryObject.prototype.decreaseSkip = function() {
+            QueryObject.prototype.decreaseSkip = function () {
                 if (this.skip != 0) {
                     this.skip = this.skip - this.limit;
                 }
             }
-            QueryObject.prototype.increaseSkip = function() {
+            QueryObject.prototype.increaseSkip = function () {
                 this.skip = this.skip + this.limit;
             }
 
             return QueryObject;
-        }).factory('DateObject', function() {
+        }).factory('DateObject', function () {
             var dateObject = {
 
             }
-            dateObject.ISOtoNepali = function(isoValue, nullValue) {
+            dateObject.ISOtoNepali = function (isoValue, nullValue) {
                 if (isoValue) {
                     var localeDate = new Date(isoValue)
                     return AD2BS(localeDate.getFullYear() + "-" + (localeDate.getMonth() + 1) + "-" + localeDate.getDate());
@@ -53,7 +53,7 @@
                 return isoValue;
             }
             return dateObject;
-        }).factory('util', function() {
+        }).factory('util', function () {
             var util = {
 
             }
@@ -73,6 +73,39 @@
             }
             return util;
         })
+        .factory('mongoQueryFactory', function () {
+            var query = {};
+            query.getSupportedQuery = function (type) {
+                switch (type) {
+                    case 'String':
+                        return [{
+                            name: '$regex',
+                            displayName: 'pattern'
+                        },{
+                            name: '$eq', displayName: 'Equals to'
+                        },];
+                        break;
+                    case 'Number':
+                    case 'Date':
+                        return [{
+                            name: '$eq', displayName: 'Equals to'
+                        },
+                        { name: '$gt', displayName: 'Greater than' },
+                        { name: '$gte', displayName: 'Greater than or equal to' },
+                        { name: '$lt', displayName: 'Less than' },
+                        { name: '$lte', displayName: 'Less than or equal to' }
+                        ]
+                        break;
+                    case 'boolean':
+                        return [{ name: '$eq', displayName: 'Equals to' }]
+                        break;
+                }
+            }
 
+            query.getSupportedClause = function () {
+                return ['$and', '$or'];
+            }
+            return query;
+        })
 
 }());

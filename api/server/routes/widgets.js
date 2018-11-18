@@ -17,11 +17,11 @@ var officegen = require('officegen');
 var fs = require('fs');
 var path = require('path');
 
-router.use(function(req, res, next) {
+router.use(function (req, res, next) {
     try {
         var token = req.body.token || req.body.query || req.headers['x-access-token'];
         if (token) {
-            jwt.verify(token, SECRET, function(err, decoded) {
+            jwt.verify(token, SECRET, function (err, decoded) {
                 if (err) {
                     res.redirect('/');
                 } else {
@@ -36,7 +36,7 @@ router.use(function(req, res, next) {
         res.json({ success: false, message: err });
     }
 });
-router.post('/', function(req, res) {
+router.post('/', function (req, res) {
     if (req.decoded && req.decoded.role === "super" && req.body.widget) {
         let widget = new Widget();
         let reqWidget = req.body.widget;
@@ -46,7 +46,8 @@ router.post('/', function(req, res) {
         widget.print = Number(reqWidget.limit);
         widget.print = Boolean(reqWidget.print);
         widget.query = reqWidget.query;
-        widget.save(function(err) {
+        widget.filters = reqWidget.filters ? JSON.stringify(reqWidget.filters) : '{}';
+        widget.save(function (err) {
             if (err) {
                 return res.json({
                     success: false,
@@ -66,7 +67,7 @@ router.post('/', function(req, res) {
 
     }
 });
-router.put('/', function(req, res) {
+router.put('/', function (req, res) {
     if (req.decoded && req.decoded.role === "super" && req.body.widget) {
         let reqWidget = req.body.widget;
         Widget.findByIdAndUpdate(reqWidget._id, {
@@ -76,7 +77,7 @@ router.put('/', function(req, res) {
             print: Boolean(reqWidget.print),
             limit: Number(reqWidget.limit),
             query: reqWidget.query
-        }, function(err) {
+        }, function (err) {
             if (err) {
                 return res.json({
                     success: false,
@@ -96,11 +97,11 @@ router.put('/', function(req, res) {
 
     }
 });
-router.get('/', function(req, res, next) {
+router.get('/', function (req, res, next) {
     if (req.decoded && req.decoded.role === "super") {
         Widget.find({}, "", {
             sort: { order: 1 }
-        }, function(err, widgets) {
+        }, function (err, widgets) {
             if (err) {
                 return res.json({
                     success: false,
@@ -117,25 +118,20 @@ router.get('/', function(req, res, next) {
         return res.redirect('/');
     }
 });
-router.get('/schemadetails', function(req, res, next) {
+router.get('/schemadetails', function (req, res, next) {
+    let columnDefintions = [];
     res.json({
-        schemas: [{
-                "claims": util.omit(Claim.schema.paths, ["__v", "_dependentId"])
-            },
-            {
-                'users': util.omit(User.schema.paths, ["_id", "__v", "password", "employeenumber"])
-            },
-            {
-                'dependents': util.omit(Dependent.schema.paths, ["_id", "__v", "employeeid"])
-            }
-        ]
+        schemas: columnDefintions.concat(util.getColumnDefinitions('claims', Claim.schema.paths, ["__v", "_dependentId"])
+            , util.getColumnDefinitions('users', User.schema.paths, ["_id", "__v", "password", "employeenumber"]),
+            util.getColumnDefinitions('dependents', Dependent.schema.paths, ["_id", "__v", "employeeid"]))
+
     });
 });
-router.delete("/:id", function(req, res) {
+router.delete("/:id", function (req, res) {
     if (req.decoded && req.decoded.role === "super") {
         var id = req.params.id;
         if (id != undefined) {
-            Widget.findByIdAndRemove(id, function(err) {
+            Widget.findByIdAndRemove(id, function (err) {
                 if (!err) {
                     return res.json({
                         success: true,
@@ -163,11 +159,11 @@ router.delete("/:id", function(req, res) {
     }
 });
 
-router.get('/widgetlist', function(req, res, next) {
+router.get('/widgetlist', function (req, res, next) {
     if (req.decoded && req.decoded.role === "super") {
         Widget.find({}, "name description _id", { sort: { order: 1 } },
 
-            function(err, widgets) {
+            function (err, widgets) {
                 if (err) {
                     return res.json({
                         success: false,
@@ -189,9 +185,9 @@ router.get('/widgetlist', function(req, res, next) {
     }
 });
 
-router.get('/:id', function(req, res, next) {
+router.get('/:id', function (req, res, next) {
     if (req.decoded && req.decoded.role === "super") {
-        Widget.findById(req.params.id, 'query print limit description', function(err, widget) {
+        Widget.findById(req.params.id, 'query print limit description filters', function (err, widget) {
             if (err) {
                 return res.json({
                     success: false,
@@ -199,7 +195,7 @@ router.get('/:id', function(req, res, next) {
                 });
             } else {
                 //get claim table record
-                Claim.aggregate(QueryMapper.buildQuery(widget.query, widget.limit, req.query.skip)).exec(function(err, results) {
+                Claim.aggregate(QueryMapper.buildQuery(widget.query, widget.limit, req.query.skip, widget.filters)).exec(function (err, results) {
                     if (!err) {
                         return res.json({
                             success: true,
@@ -222,7 +218,7 @@ router.get('/:id', function(req, res, next) {
     }
 });
 
-router.post("/print", function(req, res, next) {
+router.post("/print", function (req, res, next) {
     var docx = officegen({
         type: 'docx',
         subject: 'Claim list',
@@ -231,7 +227,7 @@ router.post("/print", function(req, res, next) {
 
     });
 
-    docx.on('error', function(err) {
+    docx.on('error', function (err) {
         return res.json({ success: false, message: "File can not be downloaded, please contact the administrator" });
     });
 
@@ -270,20 +266,20 @@ router.post("/print", function(req, res, next) {
     var pObj = docx.createTable(tableContent, tableStyle);
     var out = fs.createWriteStream('public/downloads/out.docx', { flags: 'w' });
 
-    out.on('error', function(err) {
+    out.on('error', function (err) {
         return res.json({ success: false, message: "File can not be downloaded, please contact the administrator" });
     });
 
     async.parallel([
-        function(done) {
-            out.on('close', function() {
+        function (done) {
+            out.on('close', function () {
                 console.log('Finish to create a DOCX file.');
                 res.json({ success: true, url: "downloads/out.docx" });
             });
             docx.generate(out);
         }
 
-    ], function(err) {
+    ], function (err) {
         if (err) {
             return res.json({ success: false, message: "File can not be downloaded, please contact the administrator" });
         } // Endif.

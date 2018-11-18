@@ -10,9 +10,18 @@ QueryMapper.getColumnName = function(tableName, query, type = "name") {
     }
     return columns;
 }
-QueryMapper.buildQuery = function(query, limit, skip) {
-    let queries = [{ '$skip': Number(skip || 0) }, { '$limit': Number(limit || 10) }];;
+QueryMapper.buildQuery = function(query, limit, skip, filters) {
+    let queries = [];
+    if(filters && filters.claims){
+        queries.push({'$match':filters.claims});
+    }
+    queries.push({ '$skip': Number(skip || 0) });
+    if( limit) {
+        queries.push( { '$limit': Number(limit) })
+    }
     let info = this.populateInfo(query);
+    // filters = eval(JSON.parse(filters));
+    
     if (info.hasUsers) {
         queries.push({
             $lookup: {
@@ -35,6 +44,7 @@ QueryMapper.buildQuery = function(query, limit, skip) {
 
     }
     query.push({ $project: info.project });
+    console.log(queries)
     return queries;
 
 }

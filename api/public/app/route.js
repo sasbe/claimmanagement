@@ -18,6 +18,12 @@
                     controller: 'claimListController',
                     controllerAs: "claims"
                 })
+                .when('/todayList', {
+                    templateUrl: 'app/pages/claim/todayList.html',
+                    authencticated: true,
+                    controller: 'todayListController',
+                    controllerAs: "claims"
+                })
                 .when('/claimDetails/:id', {
                     templateUrl: 'app/pages/claim/claimDetails.html',
                     authencticated: true,

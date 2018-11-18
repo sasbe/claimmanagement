@@ -48,21 +48,33 @@
                     </md-checkbox>
                 </div>
                 <div class="col-md-8 shadow">
-                    <div ng-repeat="schema in schemadetails">
-                        <div ng-repeat="(key,value) in schema">
-                            <div class="col-md-4">
-                                {{key | uppercase}}
-                            </div>
-                            <div class="col-md-8">
-                                <ul class="list-unstyled">
-                                    <li ng-repeat="column in value">
-                                        <md-checkbox ng-click="selectColumn($event,key,column.path,column.instance)" ng-checked="hasColumn(key,column.path)">
-                                            {{column.path}}
-                                        </md-checkbox>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
+                    <div class="col-md-8">
+                        <md-input-container>
+                            <label>Select columns</label>
+                            <md-select ng-model="widget.query" md-on-close="searchColumn = '';" data-md-container-class="selectdemoSelectHeader"
+                                ng-model-options="{trackBy: '$value.name + $value.context'}" multiple="">
+
+                                <md-optgroup label="Claim record">
+                                    <md-option ng-value="column" ng-repeat="column in schemadetails
+                                        | filter: {context: 'claims' }">{{column.name}}</md-option>
+                                </md-optgroup>
+                                <md-optgroup label="User record">
+                                    <md-option ng-value="column" ng-repeat="column in schemadetails
+                                            | filter: {context: 'users' }">{{column.name}}</md-option>
+                                </md-optgroup>
+                                <md-optgroup label="Dependent record">
+                                    <md-option ng-value="column" ng-repeat="column in schemadetails
+                                                | filter: {context: 'dependents' }">{{column.name}}</md-option>
+                                </md-optgroup>
+                            </md-select>
+                        </md-input-container>
+                        <ul class="list-unstyled">
+                            <li ng-repeat="column in value">
+                                <md-checkbox ng-click="selectColumn($event,key,column.path,column.instance)" ng-checked="hasColumn(key,column.path)">
+                                    {{column.path}}
+                                </md-checkbox>
+                            </li>
+                        </ul>
                     </div>
                 </div>
                 <div class="col-md-4 shadow">
@@ -80,10 +92,11 @@
                 </div>
                 <div class="col-md-12">
                     Filters:
-                    <div ng-repeat="(key,value) in widget.filters">
+                    <div ng-repeat="(tableName,clause) in widget.filters">
                         <md-input-container class="md-block">
-                            <label>Filter for {{key}}</label>
-                            <textarea ng-model="value" rows="3" md-select-on-focus></textarea>
+                            <label>Filter for {{tableName}}</label>
+                            <span ng-click="addFilterCondition(tableName)"> Add filter </span>
+                            <filter-condition condition='clause' table='tableName' schema="schemadetails"></filter-condition>
                         </md-input-container>
                     </div>
                 </div>

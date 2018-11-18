@@ -6,7 +6,7 @@
             'ClaimListControllers', 'UserListControllers',
             'CommonDirectives', 'analyticsController', 'ClaimDetailsController',
             'UserDetailsController', 'userServices', 'dependentService', 'claimServices', 'commonServices',
-            'authServices', 'ValueFormatter',
+            'authServices', 'ValueFormatter', 'QueryDirective',
             'ngAnimate', 'ngMaterial', 'ngMessages'
         ])
         .config(function($httpProvider, $mdThemingProvider) {

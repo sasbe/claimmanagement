@@ -7,6 +7,7 @@ var Dependent = require('../models/dependents');
 var jwt = require('jsonwebtoken');
 var SECRET = "sampleapplication";
 var Claim = require('../models/claim');
+var QueryMapper = require('../utils/queryMapper');
 // var Counter = require('../models/counters');
 var Utils = require("../utils/commonutil").getInstance();
 var async = require('async');
@@ -97,6 +98,152 @@ router.get("/individual/:claimid", function (req, res) {
 })
 
 router.get('/claimList', function (req, res, next) {
+    var query =[
+        {
+            "context": "claims",
+            "displayName": "_id",
+            "type": "String",
+            "name": "_id"
+        },
+        {
+            "context": "claims",
+            "displayName": "claimoffice",
+            "type": "String",
+            "name": "claimoffice"
+        },
+        {
+            "context": "claims",
+            "displayName": "claimdate",
+            "type": "Date",
+            "name": "claimdate"
+        },
+        {
+            "context": "claims",
+            "displayName": "claimamount",
+            "type": "Number",
+            "name": "claimamount"
+        },
+        {
+            "context": "claims",
+            "displayName": "dischargedate",
+            "type": "Date",
+            "name": "dischargedate"
+        },
+        {
+            "context": "claims",
+            "displayName": "reimbursedamount",
+            "type": "Number",
+            "name": "reimbursedamount"
+        },
+        {
+            "context": "claims",
+            "displayName": "remarks",
+            "type": "String",
+            "name": "remarks"
+        },
+        {
+            "context": "claims",
+            "displayName": "employeeid",
+            "type": "String",
+            "name": "employeeid"
+        },
+        {
+            "context": "claims",
+            "displayName": "dependentId",
+            "type": "String",
+            "name": "dependentId"
+        },
+        {
+            "context": "claims",
+            "displayName": "completed",
+            "type": "Boolean",
+            "name": "completed"
+        },
+        {
+            "context": "claims",
+            "displayName": "hospitalName",
+            "type": "String",
+            "name": "hospitalName"
+        },
+        {
+            "context": "claims",
+            "displayName": "admissionDate",
+            "type": "Date",
+            "name": "admissionDate"
+        },
+        {
+            "context": "users",
+            "displayName": "username",
+            "type": "String",
+            "name": "username"
+        },
+        {
+            "context": "users",
+            "displayName": "emailid",
+            "type": "String",
+            "name": "emailid"
+        },
+        {
+            "context": "users",
+            "displayName": "designation",
+            "type": "String",
+            "name": "designation"
+        },
+        {
+            "context": "users",
+            "displayName": "level",
+            "type": "String",
+            "name": "level"
+        },
+        {
+            "context": "users",
+            "displayName": "woffice",
+            "type": "String",
+            "name": "woffice"
+        },
+        {
+            "context": "users",
+            "displayName": "phone",
+            "type": "String",
+            "name": "phone"
+        },
+        {
+            "context": "users",
+            "displayName": "bankname",
+            "type": "String",
+            "name": "bankname"
+        },
+        {
+            "context": "users",
+            "displayName": "bankacnumber",
+            "type": "String",
+            "name": "bankacnumber"
+        },
+        {
+            "context": "users",
+            "displayName": "bankbranch",
+            "type": "String",
+            "name": "bankbranch"
+        },
+        {
+            "context": "dependents",
+            "displayName": "dependentName",
+            "type": "String",
+            "name": "dependentName"
+        },
+        {
+            "context": "dependents",
+            "displayName": "relationshipType",
+            "type": "String",
+            "name": "relationshipType"
+        },
+        {
+            "context": "dependents",
+            "displayName": "dob",
+            "type": "String",
+            "name": "dob"
+        }
+    ];
     // forming query criteria
     if (req.decoded) {
         var filter = {};
@@ -106,49 +253,51 @@ router.get('/claimList', function (req, res, next) {
         if (req.query.limit) {
             filter.limit = parseInt(req.query.limit);
         }
-        var criteria = {};
+        var criteria = {
+            claims: 
+                {
+                    '$and': [
+
+                    ]
+                }
+        };
+        var claimsFilter = criteria.claims['$and'];
         var dateType = req.query.dateType ? req.query.dateType : "claimdate";
         if (req.decoded.role === "single") {
-            criteria.empno = parseInt(req.decoded.employeenumber);
+            claimsFilter.push({ 'employeeid': { '$eq': req.decoded.employeenumber } });
         } else if (req.query.empno && req.query.empno != "undefined") {
-            criteria.employeeid = req.query.empno;
+            claimsFilter.push({ 'employeeid': { '$eq': req.query.empno } });
         }
         if (req.query.claimno && req.query.claimno != "undefined") {
-            criteria.claimno = req.query.claimno;
+            claimsFilter.push({ '_id': { '$eq': req.query.claimno } });
         }
+        var dateQuery = {}
         if (req.query.fromdate && req.query.fromdate !== "undefined") {
-            criteria[dateType] = {};
-            criteria[dateType]["$gte"] = new Date(req.query.fromdate)
-
+            dateQuery = {
+                "$gte": new Date(req.query.fromdate)
+            };
         }
-        if (req.query.fromdate && req.query.fromdate !== "undefined") {
-            criteria[dateType] = {};
-            criteria[dateType]["$gte"] = new Date(req.query.fromdate)
 
-        }
         if (req.query.todate && req.query.todate !== "undefined") {
-            if (!criteria[dateType]) {
-                criteria[dateType] = {};
-            }
-            criteria[dateType]["$lte"] = new Date(req.query.todate)
+            dateQuery["$lte"] = new Date(req.query.todate)
         }
-        console.log(JSON.stringify(criteria) + req.query.fromdate + req.query.todate);
-        Claim.find(
-            criteria, "employeeid _id claimdate claimname claimamount dischargedate reimbursedamount", filter,
-            function (err, claims) {
-                if (err) {
-                    return res.json({
-                        success: false,
-                        message: err
-                    });
-                } else {
-                    console.log(claims.length);
-                    return res.json({
-                        success: true,
-                        claims: claims
-                    });
-                }
-            })
+        var dateCriteria  = {};
+        dateCriteria[dateType] = dateQuery;
+        claimsFilter.push(dateCriteria)
+        
+        Claim.aggregate(QueryMapper.buildQuery(query, filter.limit, filter.skip, criteria)).exec(function (err, results) {
+            if (err) {
+                return res.json({
+                    success: false,
+                    message: err
+                });
+            } else {
+                return res.json({
+                    success: true,
+                    claims: results,
+                })
+            }
+        })
     } else {
         return Utils.throwError(res, "AccessDenied");
     }

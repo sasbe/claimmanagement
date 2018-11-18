@@ -13,7 +13,7 @@
                 },
                 template: ' <a ng-click="sort_by(order)" style="color: #555555;">' +
                     '    <span ng-transclude></span>' +
-                    '    <i ng-class="selectedCls(order)"></i>' +
+                    '    <i ng-class="selectedCls(order)" class="hidden-print"></i>' +
                     '</a>',
                 link: function(scope) {
                         // change sorting order

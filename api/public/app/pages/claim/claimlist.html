@@ -108,7 +108,7 @@
                                 </nepalidatereadonly>
                             </div>
                             <div class="sa-table-cell" data-label="Claim name: ">
-                                {{ x.claimname }}
+                                {{ x.dependents[0].dependentName || 'SELF' }}
                             </div>
                             <div class="sa-table-cell" data-label="Claim amount: ">
                                 <nepalimoneyreadonly money="{{x.claimamount}} ">

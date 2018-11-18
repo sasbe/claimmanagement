@@ -52,6 +52,28 @@
                     </p>
                 </md-card-content>
             </md-card>
+            <md-card md-theme="dark-blue" ng-show="main.isAdmin" class="md-hue-1 col-md-4 custom-md-card">
+                <md-card-title>
+                    <md-card-title-text>
+                        <span class="md-headline">Daily report</span>
+                    </md-card-title-text>
+                    <md-card-title-media>
+                        <div class="md-media-md card-media">
+                            <img src="images/claims.svg">
+                        </div>
+                    </md-card-title-media>
+                </md-card-title>
+                <md-card-actions layout="row" layout-align="start center">
+                    <md-button class="md-fab" ng-href="/todayList" aria-label="Today report">
+                        <md-icon md-svg-src="images/list.svg"></md-icon>
+                    </md-button>
+                </md-card-actions>
+                <md-card-content>
+                    <p>
+                        View the list of claim modified today.
+                    </p>
+                </md-card-content>
+            </md-card>
             <md-card md-theme="getTheme($index)" ng-show="main.isAdmin" class="md-hue-1 col-md-4 custom-md-card" ng-repeat="widget in widgets">
                 <md-card-title>
                     <md-card-title-text>

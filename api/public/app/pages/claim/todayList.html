@@ -1,0 +1,161 @@
+<div class="container custom-container">
+    <md-content ng-hide="main.appLoading">
+        <md-toolbar class="visible-print">
+            <div class="row">
+                <div class="ntc-header col-md-12">
+                    <div class="pull-left">
+                        <img src="images/ntc-transparent.png" class="pull-left">
+                        <div class="pull-left p-lg">
+                            <p>नेपाल टेलिकम </p>
+                            <p>Nepal Telecom</p>
+                        </div>
+                    </div>
+                    <div class="pull-right p-lg">
+                        <p>राष्ट्र निर्माण हाम्रो लक्ष्य</p>
+                    </div>
+                </div>
+                <div class="ntc-subject text-center">
+                    बिषय: डिस्चार्ज भौचर सहि गरि पठाइएको छ |
+                </div>
+
+                <div class="ntc-description">
+                    <pre>
+श्री प्रभू ईन्स्योरेन्स लिमि६े८
+केन्द्रीय कार्यालय, तिनकूने का७मा०८ौं ।
+
+प्रस्तूत विषयमा यस कम्पनीका निम्न लिखित कर्मचारीहरुको तहांबा६ प्राप्त औषधी उपचार ८िस्चार्ज भौचर सही ५ाप गरी यसै पत्र साथ 
+प७ाइएको व्यहोरा अनूरोध गरिन्५ । 
+सो  प्राप्त भएप५ि दावी रकम यथासि३्र उपलब्ध गराई दिन’ह’न अन’रोध गरिन्५ ।
+                                
+                                    
+                        </pre>
+                </div>
+            </div>
+        </md-toolbar>
+        <md-toolbar md-theme="dark-purple" class="md-hue-2 hidden-print">
+            <div class="row md-toolbar-tools">
+                <h2 class="col-md-6">Claims that has changed today</h2>
+                <div class="col-md-6 text-right">
+                    <i class="fa fa-print" aria-hidden="true" ng-click="claims.print()"></i>
+                </div>
+            </div>
+        </md-toolbar>
+        <md-content layout-padding>
+            <div class="row filter hidden-print">
+                <div class="col-md-2">
+                    <i class="fa fa-filter fa-lg" aria-hidden="true" data-toggle="collapse" href="#filterContainer"></i>
+                </div>
+                <div class="col-md-10">
+                    <div class="form-group col-md-6">
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="glyphicon glyphicon-search"></i>
+                            </span>
+                            <input ng-model="claims.filter" type="text" class="form-control" name="email" placeholder="Search in page">
+                        </div>
+                    </div>
+                    <ul class=" pagination pull-right ">
+                        <li ng-hide="claims.filters.skip==0">
+                            <a ng-click="prevPage() " ng-disabled="claims.filters.skip==0">« Prev</a>
+                        </li>
+
+                        <li ng-hide="claims.claims.length<10">
+                            <a ng-click="nextPage() ">Next »</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div id="filterContainer" class="collapse col-md-6">
+                <form name="filterform">
+                    <div class="row">
+
+                        <div class="col-md-6 form-group">
+                            <md-input-container>
+                                <label>Employee number:</label>
+                                <input name="employeeno" ng-model="claims.filters.empno" number>
+                                <div ng-messages="filterform.employeeno.$error">
+                                    <div ng-message="number">Please enter a number!</div>
+                                </div>
+                            </md-input-container>
+                        </div>
+                        <div class="col-md-6 form-group ">
+                            <md-input-container>
+                                <label>Claim number:</label>
+                                <input name="claimno" ng-model="claims.filters.claimno">
+                            </md-input-container>
+                        </div>
+                        <div class="col-md-6 form-group ">
+                            <md-checkbox ng-model="getAll" aria-label="Fetch all data">
+                                Get all data
+                            </md-checkbox>
+                        </div>
+                        <div class="form-group col-md-6 ">
+
+                            <md-button class="md-raised md-warn" ng-click="claims.applyFilter() " data-toggle="collapse"
+                                href="#filterContainer">Search</md-button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="table-layout">
+                <div class="sa-table">
+                    <div class="sa-table-header sa-table-row">
+                        <div class="sa-table-header-cell sa-table-cell" order=" 'claimno' " sort="sort " custom-sort>
+                            सी.न.
+                        </div>
+                        <div class="sa-table-header-cell sa-table-cell" order=" 'claimno' " sort="sort " custom-sort>
+                            दाबी न.
+                        </div>
+                        <div class="sa-table-header-cell sa-table-cell" order=" 'empno' " sort="sort " custom-sort>
+                            क.द.न.
+                        </div>
+                        <div class="sa-table-header-cell sa-table-cell" order=" 'employeename' " sort="sort "
+                            custom-sort>
+                            कर्मचारी को नाम, थर
+                        </div>
+                        <div class="sa-table-header-cell sa-table-cell" order=" 'dependentName' " sort="sort "
+                            custom-sort>
+                            आश्रितको नाम
+                        </div>
+                        <div class="sa-table-header-cell sa-table-cell" order=" 'claimamount' " sort="sort "
+                            custom-sort>
+                            डिस्चार्ज रकम
+                        </div>
+                    </div>
+                    <div class="sa-table-body">
+
+                        <div ng-if="claims.claims.length == 0" class="sa-table-row">
+                            <div class="sa-table-cell">No claim created today</div>
+                        </div>
+
+                        <div class="sa-table-row" ng-repeat="x in claims.claims | orderBy:sort.sortingOrder:sort.reverse | filter: claims.filter ">
+                            <div class="sa-table-cell" data-label="सी.न. :">
+                                {{$index + 1}}
+                            </div>
+                            <div class="sa-table-cell" data-label="दाबी न. :">
+                                <a ng-href="claimDetails/{{x._id}} ">
+                                    {{x._id}}
+                                </a>
+                            </div>
+                            <div class="sa-table-cell" data-label="क.द.न. :">
+                                <a ng-href="userDetails/{{x.employeeid}} ">
+                                    {{x.employeeid}}
+                                </a>
+                            </div>
+                            <div class="sa-table-cell" data-label="कर्मचारी को नाम, थर:">
+                                {{ x.users[0].username }}
+                            </div>
+                            <div class="sa-table-cell" data-label="आश्रितको नाम:">
+                                {{ x.dependents[0].dependentName || 'SELF' }}
+                            </div>
+                            <div class="sa-table-cell" data-label="डिस्चार्ज रकम: ">
+                                <nepalimoneyreadonly money="{{x.claimamount}} ">
+                                </nepalimoneyreadonly>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </md-content>
+    </md-content>
+</div>
