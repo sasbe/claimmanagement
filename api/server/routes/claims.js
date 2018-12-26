@@ -98,7 +98,7 @@ router.get("/individual/:claimid", function (req, res) {
 })
 
 router.get('/claimList', function (req, res, next) {
-    var query =[
+    var query = [
         {
             "context": "claims",
             "displayName": "_id",
@@ -254,12 +254,12 @@ router.get('/claimList', function (req, res, next) {
             filter.limit = parseInt(req.query.limit);
         }
         var criteria = {
-            claims: 
-                {
-                    '$and': [
+            claims:
+            {
+                '$and': [
 
-                    ]
-                }
+                ]
+            }
         };
         var claimsFilter = criteria.claims['$and'];
         var dateType = req.query.dateType ? req.query.dateType : "claimdate";
@@ -281,10 +281,10 @@ router.get('/claimList', function (req, res, next) {
         if (req.query.todate && req.query.todate !== "undefined") {
             dateQuery["$lte"] = new Date(req.query.todate)
         }
-        var dateCriteria  = {};
+        var dateCriteria = {};
         dateCriteria[dateType] = dateQuery;
         claimsFilter.push(dateCriteria)
-        
+
         Claim.aggregate(QueryMapper.buildQuery(query, filter.limit, filter.skip, criteria)).exec(function (err, results) {
             if (err) {
                 return res.json({
@@ -307,7 +307,7 @@ router.get('/claimList', function (req, res, next) {
 router.put('/updateClaim/:claimId', function (req, res) {
     try {
         Claim.findById(req.params.claimId, function (err, claim) {
-            if (err) {
+            if (err && !claim) {
                 return Utils.throwError(res, "No such claim exist");
             } else {
                 if (claim.employeeid === req.decoded.employeenumber || req.decoded.role === "super") {
@@ -365,9 +365,10 @@ router.post('/addClaim', function (req, res) {
             var employeeid = req.body.employeeid,
                 claimdate = req.body.claimdate,
                 claimamount = req.body.claimamount,
-                dependentId = req.body.dependentId;
+                dependentId = req.body.dependentId,
+                _id = req.body._id;
             if (employeeid == null || employeeid == '' || claimdate == null || claimdate == ''
-                || claimamount == null || claimamount === '' || dependentId == null) {
+                || claimamount == null || claimamount === '' || dependentId == null || _id === '' || _id == null) {
                 return Utils.throwError(res, "RequireField");
             }
             //chain operation
@@ -381,42 +382,26 @@ router.post('/addClaim', function (req, res) {
                     } else if (user._id != employeeid) {
                         return Utils.throwError(res, 'This claim can not be created due to technical reason. Please consult with administrator');
                     } else {
-                        var year = claimdate.split("-")[0];
-                        var firstDay = year + "-01-01T00:00:00Z";
-                        var lastDay = year + "-12-31T00:00:00Z"
-                        Claim.count({
-                            "claimdate": {
-                                "$gte": new Date(firstDay),
-                                "$lte": new Date(lastDay)
+                        var newClaims = new Claim();
+                        newClaims._id = _id;
+                        newClaims.claimdate = claimdate;
+                        newClaims.claimoffice = user.woffice;
+                        newClaims.claimamount = claimamount;
+                        newClaims.employeeid = employeeid;
+                        newClaims.dependentId = dependentId;
+                        newClaims.save(function (saveErr) {
+                            if (saveErr) {
+                                return res.json({
+                                    success: false,
+                                    message: saveErr
+                                });
+                            } else {
+                                return res.json({
+                                    success: true,
+                                    message: "Claim is created"
+                                });
                             }
-                        },
-                            function (err, count) {
-                                if (err) {
-                                    return Utils.throwError(res, 'AdminError');
-                                } else {
-                                    var claimno = year + "_" + (count + 1);
-                                    var newClaims = new Claim();
-                                    newClaims._id = claimno;
-                                    newClaims.claimdate = claimdate;
-                                    newClaims.claimoffice = user.woffice;
-                                    newClaims.claimamount = claimamount;
-                                    newClaims.employeeid = employeeid;
-                                    newClaims.dependentId = dependentId;
-                                    newClaims.save(function (saveErr) {
-                                        if (saveErr) {
-                                            return res.json({
-                                                success: false,
-                                                message: saveErr
-                                            });
-                                        } else {
-                                            return res.json({
-                                                success: true,
-                                                message: "Claim is created"
-                                            });
-                                        }
-                                    });
-                                }
-                            })
+                        });
                     }
                 })
             }
@@ -442,41 +427,28 @@ router.post('/addClaim', function (req, res) {
                         } else if (user._id != employeeid) {
                             return Utils.throwError(res, 'This claim can not be created due to technical reason. Please consult with administrator');
                         } else {
-                            var year = claimdate.split("-")[0];
-                            var firstDay = year + "-01-01T00:00:00Z";
-                            var lastDay = year + "-12-31T00:00:00Z"
-                            Claim.count({
-                                "claimdate": {
-                                    "$gte": new Date(firstDay),
-                                    "$lte": new Date(lastDay)
-                                }
-                            }, function (err, count) {
-                                if (err) {
-                                    return Utils.throwError(res, 'AdminError');
+
+                            var claimno = year + "_" + (count + 1);
+                            var newClaims = new Claim();
+                            newClaims._id = claimno;
+                            newClaims.claimdate = claimdate;
+                            newClaims.claimoffice = user.woffice;
+                            newClaims.claimamount = claimamount;
+                            newClaims.employeeid = employeeid;
+                            newClaims.dependentId = dependentId;
+                            newClaims.save(function (saveErr) {
+                                if (saveErr) {
+                                    return res.json({
+                                        success: false,
+                                        message: saveErr
+                                    });
                                 } else {
-                                    var claimno = year + "_" + (count + 1);
-                                    var newClaims = new Claim();
-                                    newClaims._id = claimno;
-                                    newClaims.claimdate = claimdate;
-                                    newClaims.claimoffice = user.woffice;
-                                    newClaims.claimamount = claimamount;
-                                    newClaims.employeeid = employeeid;
-                                    newClaims.dependentId = dependentId;
-                                    newClaims.save(function (saveErr) {
-                                        if (saveErr) {
-                                            return res.json({
-                                                success: false,
-                                                message: saveErr
-                                            });
-                                        } else {
-                                            return res.json({
-                                                success: true,
-                                                message: "Claim is created"
-                                            });
-                                        }
+                                    return res.json({
+                                        success: true,
+                                        message: "Claim is created"
                                     });
                                 }
-                            })
+                            });
                         }
                     } else {
                         return Utils.throwError(res, "AdminError");

@@ -4,20 +4,19 @@
             <div class="row md-toolbar-tools">
                 <h2 class="col-md-6" flex md-truncate>Detail of claim "{{ claimDetails.claimData._id }}"</h2>
                 <div class="col-md-6 text-right">
-                    <i class="fa fa-pencil-square-o" ng-class="{ 'fa-floppy-o':claimDetails.editMode}" ng-click="claimDetails.changeMode()" aria-hidden="true"></i>
+                    <i class="fa fa-pencil-square-o" ng-class="{ 'fa-floppy-o':claimDetails.editMode}" ng-click="(!claimDetails.editMode || !claimForm.claimno.$error.required) && claimDetails.changeMode()" aria-hidden="true"></i>
                     <i class="fa fa-trash-o" aria-hidden="true" ng-show="!claimDetails.editMode" ng-click="claimDetails.deleteClaim()"></i>
                     <i class="fa fa-times" aria-hidden="true" ng-show="claimDetails.editMode" ng-click="claimDetails.cancelEdit()"></i>
                 </div>
             </div>
         </md-toolbar>
-        <form class="form-horizontal">
+        <form class="form-horizontal" name="claimForm">
             <div class="col-md-6">
                 <div class="form-group ">
                     <label class="control-label col-md-6 ">Employee no:</label>
                     <div class="col-md-6 ">
                         <p class="form-control-static ">{{claimDetails.claimData.employeeid}}</p>
                     </div>
-
                 </div>
 
                 <div class="form-group">
@@ -56,17 +55,26 @@
                 </div>
             </div>
             <div class="col-md-6">
+                <div class="form-group ">
+                    <md-input-container>
+                        <label class="md-required">Claim number</label>
+                        <input name="claimno" ng-model="claimDetails.claimData._id" ng-disabled="main.isAdmin && !claimDetails.editMode" required>
+                        <div ng-messages="claimForm.claimno.$error">
+                            <div ng-message="required">This field is required!</div>
+                        </div>
+                    </md-input-container>
+                </div>
                 <div class="form-group">
                     <label aria-labelledby="dischargedate ">Discharge date:</label>
                     <nepalidatepicker ng-model="claimDetails.claimData.dischargedate " ng-disabled="main.isAdmin && !claimDetails.editMode "></nepalidatepicker>
                 </div>
                 <div class="form-group">
                     <label aria-labelledby="reimbursedamount ">Discharge amount</label>
-                    <nepalimoney ng-model="claimDetails.claimData.reimbursedamount " ng-disabled="main.isAdmin && !claimDetails.editMode "></nepalimoney>
+                    <nepalimoney ng-model="claimDetails.claimData.reimbursedamount" ng-disabled="main.isAdmin && !claimDetails.editMode"></nepalimoney>
                 </div>
                 <div class="form-group">
                     <label>Remarks:</label>
-                    <textarea ng-model="claimDetails.claimData.remarks" class="form-control" cols="30" rows="10" ng-disabled="main.isAdmin && !claimDetails.editMode "></textarea>
+                    <textarea ng-model="claimDetails.claimData.remarks" class="form-control" cols="30" rows="10" ng-disabled="main.isAdmin && !claimDetails.editMode"></textarea>
                 </div>
             </div>
         </form>

@@ -6,6 +6,7 @@
         .controller('createClaimCtrl', function ($location, $timeout, $http, Claim, DateObject, $scope) {
             var controllerScope = this;
             controllerScope.claimData = {
+                _id: '',
                 claimdate: (new Date()).toISOString(),
                 claimamount: 0,
                 dependentId: 'SELF'
