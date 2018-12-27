@@ -11,7 +11,7 @@
                 <div class="form-group col-md-6">
                     <md-input-container>
                         <label class="md-required">Claim number</label>
-                        <input name="claimno" ng-model="createClaim.claimData._id" required>
+                        <input autofocus ="claimno" ng-model="createClaim.claimData._id" required>
                         <div ng-messages="createClaim.claimno.$error">
                             <div ng-message="required">This field is reqiured!</div>
                         </div>
@@ -20,7 +20,7 @@
                 <div class="form-group col-md-6">
                     <md-autocomplete md-autoselect=true ng-disabled="createClaim.disabledAutoComplete" md-menu-class="autocomplete-custom" required md-input-name="employeeno" md-selected-item="selectedItem" 
                      md-floating-label="Employee number" md-search-text="searchText" ng-pattern="/^[0-9]*$/"
-                     md-search-text-change="createClaim.clearDependent()" md-items="item in createClaim.getMatches(searchText)" md-item-text="item._id" md-selected-item-change="createClaim.selectedItemChange(item)">
+                     md-no-cache="true" md-search-text-change="createClaim.clearDependent()" md-items="item in createClaim.getMatches(searchText)" md-item-text="item._id" md-selected-item-change="createClaim.selectedItemChange(item)">
                         <md-item-template>
                             <span class="item-metadata">
                                 <span>
@@ -46,7 +46,7 @@
                 <div class="form-group col-md-6">
                     <md-autocomplete ng-disabled="createClaim.disabledDependent" md-menu-class="autocomplete-custom" required md-input-name="depenedent" md-selected-item="selectedDependent" 
                     md-floating-label="Dependent name" md-search-text="searchDependent" md-items="item in createClaim.getMatchedDependents(searchDependent)"
-                    md-item-text="item.dependentName+''" md-selected-item-change="createClaim.selectedDependentChange(item)">
+                    md-no-cache="true" md-item-text="item.dependentName+''" md-selected-item-change="createClaim.selectedDependentChange(item)">
                         <md-item-template>
                             <span class="item-metadata">
                                 <span>
@@ -88,6 +88,8 @@
 
 
             <md-button type="submit" class="md-primary md-raised" ng-disabled=" addClaimForm.$invalid">Add Claim</md-button>
+
+            <md-button ng-click="createClaim.addClaim(true)" class="md-warn md-raised" ng-disabled=" addClaimForm.$invalid">Save and create another</md-button>
 
         </form>
     </md-content>

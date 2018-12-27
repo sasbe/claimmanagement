@@ -427,10 +427,8 @@ router.post('/addClaim', function (req, res) {
                         } else if (user._id != employeeid) {
                             return Utils.throwError(res, 'This claim can not be created due to technical reason. Please consult with administrator');
                         } else {
-
-                            var claimno = year + "_" + (count + 1);
                             var newClaims = new Claim();
-                            newClaims._id = claimno;
+                            newClaims._id = _id;
                             newClaims.claimdate = claimdate;
                             newClaims.claimoffice = user.woffice;
                             newClaims.claimamount = claimamount;

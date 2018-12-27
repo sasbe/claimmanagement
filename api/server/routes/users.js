@@ -66,7 +66,7 @@ router.get("/search/:searchKey", function (req, res) {
     try {
         if (req.decoded && req.decoded.role == "super" && req.params.searchKey != "undefined") {
             let empno = req.params.searchKey;
-            let query = { _id: { $eq: empno } };
+            let query = { _id: { $regex: ".*"+empno+".*", $options: 'i'} };
             User.find(query, "_id username", function (err, users) {
                 if (err) {
                     return res.json({
